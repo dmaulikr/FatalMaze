@@ -10,6 +10,7 @@ public class EditorUI : MonoBehaviour
     public List<string> availablePlaceables;
     public Button modelButton;
     private List<GameObject> tunnelList;
+    private List<GameObject> placeableList;
     private List<Sprite> imageList;
     [System.NonSerialized]
     public bool panelVisible = false;
@@ -20,6 +21,7 @@ public class EditorUI : MonoBehaviour
     {
         editorUI = this;
         tunnelList = MainController.mainController.allTunnels;
+        placeableList = MainController.mainController.allPlaceables;
         imageList = MainController.mainController.images.GetComponent<Images>().images;
         //buildButtons();
 	}
@@ -41,14 +43,25 @@ public class EditorUI : MonoBehaviour
         int defaultX = bt_width/2 + 2;
         int startY = -bt_height/2 - 2;
         List<string> list = new List<string>();
+        List<GameObject> currentModels = new List<GameObject>();
 
-        if (type == "tunnels") list = availableTunnels;
-        else if (type == "placeables") list = availablePlaceables;
+        if (type == "tunnels")
+        {
+            list = availableTunnels;
+            currentModels = tunnelList;
+        }
+        else if (type == "placeables")
+        {
+            list = availablePlaceables;
+            currentModels = placeableList;
+        }
 
         for (var a = 0; a < list.Count; a++)
         {
             Button buttonClone = Instantiate(modelButton, modelButton.transform.position, modelButton.transform.rotation) as Button;
             buttonClone.GetComponent<selectButton>().modelId = list[a];
+            buttonClone.GetComponentInChildren<Text>().text = CameraControl.mainCamera.findObject(currentModels, list[a]).GetComponent<Model>().name;
+            buttonClone.GetComponent<Image>().sprite = CameraControl.mainCamera.findObject(currentModels, list[a]).GetComponent<Model>().image;
             buttonClone.transform.position = new Vector3(startX, startY, 0f);
             buttonClone.transform.SetParent(transform, false);
             startX += bt_width + 2;

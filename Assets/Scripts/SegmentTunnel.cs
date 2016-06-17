@@ -11,8 +11,4 @@ public class SegmentTunnel : MonoBehaviour
 
     }
 
-    public void outline()
-    {
-
-    }
 }

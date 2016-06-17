@@ -8,6 +8,7 @@ public class Model : MonoBehaviour
     public string shortCode;
     public string name;
     public int[] coords = new int[4];
+    public Sprite image;
 
     void Start()
     {

@@ -56,11 +56,10 @@ public class CameraControl : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             objectHit = hit.transform;
-            if (selectedObject != null)
+            if (selectedObject != null && selectedObject.tag == "Placeable")
             {
                 selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
             }
-            if (objectHit.gameObject.tag == "SegmentTunnel") objectHit.gameObject.GetComponent<SegmentTunnel>().outline();
         }
 
         if (selectedObject != null) selectedPosition = selectedObject.transform.position;
@@ -179,11 +178,8 @@ public class CameraControl : MonoBehaviour
     {
         if(selectedObject != null)
         {
-            Destroy(selectedObject);
-        }
-        if (objectHit.gameObject.GetComponent<Segment>().holder != null && selectedObject == null)
-        {
-            Destroy(objectHit.gameObject.GetComponent<Segment>().holder);
+            if(selectedObject.tag == "Placeable") Destroy(selectedObject);
+            if (selectedObject.tag == "Tunnel") selectedObject = null;
         }
     }
 
@@ -203,7 +199,8 @@ public class CameraControl : MonoBehaviour
         {
             if (findObject(controller.allTunnels, modelId))
             {
-                selectedObject = findObject(controller.allTunnels, modelId);
+                GameObject tunnel = findObject(controller.allTunnels, modelId);
+                selectedObject = tunnel;
                 selectedIdShort = selectedObject.GetComponent<Model>().shortCode;
             }
         }
@@ -212,7 +209,8 @@ public class CameraControl : MonoBehaviour
             if (findObject(controller.allPlaceables, modelId))
             {
                 GameObject placeable = findObject(controller.allPlaceables, modelId);
-                selectedObject = Instantiate(placeable, placeable.transform.position, placeable.transform.rotation) as GameObject;
+                GameObject placeableClone = Instantiate(placeable, placeable.transform.position, placeable.transform.rotation) as GameObject;
+                selectedObject = placeableClone;
                 selectedIdFull = selectedObject.GetComponent<Model>().code;
             }
         }

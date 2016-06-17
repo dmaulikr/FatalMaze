@@ -43,7 +43,8 @@ public class Segment : MonoBehaviour
         if (currentTile)
         {
             Destroy(holder.gameObject);
-            holder = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
+            GameObject tileClone = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
+            holder = tileClone;
             holder.GetComponent<Model>().saveStats();
             holder.transform.parent = GameObject.Find("Tunnels").transform;
         }
