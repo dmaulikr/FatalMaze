@@ -3,8 +3,7 @@
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
-player_win_x86.pdb
-player_win_x86_s.pdb
+*.pdb
 Fatal Maze.apk
 
 # Unity3D generated meta files

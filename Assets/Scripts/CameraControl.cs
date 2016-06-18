@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviour
     public static CameraControl mainCamera;
     private MainController controller;
     private Camera camera;
-    private Ray ray;
+    public Ray ray;
     private RaycastHit hit;
     private Transform objectHit;
     private List<GameObject> segmentList;
@@ -29,8 +29,8 @@ public class CameraControl : MonoBehaviour
     public string selectedIdFull;
     private Vector3 selectedPosition = new Vector3(0f, 0f, 0f);
     public GameObject models;
-    private int[,] currentMap;
-    private int[,] currentPlaceables;
+    private string[,] currentMap;
+    private string[,] currentPlaceables;
     private string mapsPath;
     private GameObject tunnels;
     private GameObject placeables;
@@ -55,22 +55,37 @@ public class CameraControl : MonoBehaviour
         ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            objectHit = hit.transform;
-            if (selectedObject != null && selectedObject.tag == "Placeable")
+
+            if(objectHit != hit.transform)
             {
-                selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
+                if (objectHit != null && objectHit.tag == "SegmentTunnel") objectHit.GetComponent<MeshRenderer>().enabled = false;
+                objectHit = hit.transform;
+                if (objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag == "Tunnel") objectHit.GetComponent<MeshRenderer>().enabled = true;
+            }
+
+            if (selectedObject != null && mousePosition[0] <= screenWidth - 205) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
+
+            if (selectedObject == null && objectHit.tag == "SegmentTunnel") objectHit.GetComponent<MeshRenderer>().enabled = false;
+
+        }
+        if (selectedObject != null) selectedPosition = selectedObject.transform.position;
+
+        //UI//
+        if (selectedObject != null && selectedObject.tag == "Tunnel")
+        {
+            if (Input.GetMouseButton(0))
+            {
+                putObject();
+            }
+        }
+        else if(selectedObject != null && selectedObject.tag == "Placeable")
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                putObject();
             }
         }
 
-        if (selectedObject != null) selectedPosition = selectedObject.transform.position;
-        //if (selectedObject.tag == "Placeable") selectedObject.transform.position = objectHit.transform.position;
-
-
-        //UI//
-        if(Input.GetMouseButtonDown(0))
-        {
-            if(selectedObject != null) putObject();
-        }
         if (Input.GetMouseButtonDown(1) || Input.GetKeyDown("delete"))
         {
                 deleteObject();
@@ -82,22 +97,22 @@ public class CameraControl : MonoBehaviour
         }
 
         //rotating
-        if (Input.GetKeyDown("t") || Input.GetAxis("Mouse ScrollWheel") < 0f && selectedObject != null) //Zoom)
+        if (Input.GetKeyDown("t") || Input.GetAxis("Mouse ScrollWheel") < 0f && selectedObject != null && selectedObject.tag == "Placeable") //Zoom)
         {
-            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, selectedObject.transform.localEulerAngles.y + 90f, 0.0f));
+            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y + 10f + 10f - selectedObject.transform.localEulerAngles.y%10), 0.0f));
         }
-        if (Input.GetKeyDown("r") || Input.GetAxis("Mouse ScrollWheel") > 0f && selectedObject != null) //Zoom)
+        if (Input.GetKeyDown("r") || Input.GetAxis("Mouse ScrollWheel") > 0f && selectedObject != null && selectedObject.tag == "Placeable") //Zoom)
         {
-            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, selectedObject.transform.localEulerAngles.y - 90f, 0.0f));
+            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y - 10f - selectedObject.transform.localEulerAngles.y % 10), 0.0f));
         }
 
 
         // zooming
-        if(Input.GetAxis("Mouse ScrollWheel") > 0f && selectedObject == null) //Zoom
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f && (selectedObject == null || selectedObject.tag != "Placeable")) //Zoom
         {
             if(transform.position.y > 5f) transform.Translate(Vector3.forward * scrollSpeed);
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f && selectedObject == null) //Zoom out
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f && (selectedObject == null || selectedObject.tag != "Placeable")) //Zoom out
         {
             if (transform.position.y < 85f) transform.Translate(-Vector3.forward * scrollSpeed);
         }
@@ -178,13 +193,14 @@ public class CameraControl : MonoBehaviour
     {
         if(selectedObject != null)
         {
-            if(selectedObject.tag == "Placeable") Destroy(selectedObject);
-            if (selectedObject.tag == "Tunnel") selectedObject = null;
+            Destroy(selectedObject);
         }
     }
 
     public void selectObject(string modelId)
     {
+        if (selectedObject != null) Destroy(selectedObject.gameObject);
+
         string tag = "";
         if (findObject(controller.allTunnels, modelId))
         {
@@ -200,7 +216,10 @@ public class CameraControl : MonoBehaviour
             if (findObject(controller.allTunnels, modelId))
             {
                 GameObject tunnel = findObject(controller.allTunnels, modelId);
-                selectedObject = tunnel;
+                GameObject tunnelClone = Instantiate(tunnel, tunnel.transform.position, tunnel.transform.rotation) as GameObject;
+                tunnelClone.GetComponentInChildren<MeshRenderer>().enabled = false;
+                tunnelClone.GetComponent<Collider>().enabled = false;
+                selectedObject = tunnelClone;
                 selectedIdShort = selectedObject.GetComponent<Model>().shortCode;
             }
         }
@@ -242,7 +261,7 @@ public class CameraControl : MonoBehaviour
 
         for (int a = 0; a < list.Count; a++)
         {
-            if (list[a].GetComponent<SegmentTunnel>() && list[a].GetComponent<SegmentTunnel>().id == id || list[a].GetComponent<Model>() && list[a].GetComponent<Model>().id == id)
+            if (list[a].GetComponent<SegmentTunnel>() && list[a].GetComponent<SegmentTunnel>().id == id)
             {
                 returnObject = list[a];
                 found = true;
@@ -281,7 +300,7 @@ public class CameraControl : MonoBehaviour
             if (segments[a].GetComponent<Segment>().holder != null) modelCount++;
         }
 
-        currentMap = new int[modelCount, 4];
+        currentMap = new string[modelCount, 4];
 
         for (int a = 0, mapPos = 0; a < segments.Length; a++)
         {
@@ -297,7 +316,7 @@ public class CameraControl : MonoBehaviour
             }
         }
 
-        currentPlaceables = new int[placeableCount, 4];
+        currentPlaceables = new string[placeableCount, 4];
 
         for (int a = 0, placePos = 0; a < placeables.Length; a++)
         {
@@ -311,7 +330,7 @@ public class CameraControl : MonoBehaviour
 
     }
 
-    public string getArrayString(int[,] request)
+    public string getArrayString(string[,] request)
     {
         string mapString = "{";
         for (int a = 0; a < request.GetLength(0); a++)
@@ -373,8 +392,8 @@ public class CameraControl : MonoBehaviour
     [Serializable]
     class MapData
     {
-        public int[,] mData;
-        public int[,] pData;
+        public string[,] mData;
+        public string[,] pData;
     }
 
 

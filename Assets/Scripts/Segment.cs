@@ -15,7 +15,7 @@ public class Segment : MonoBehaviour
 
     void Start()
     {
-
+        holder = null;
     }
 
     public void updateSegment()
@@ -42,7 +42,11 @@ public class Segment : MonoBehaviour
 
         if (currentTile)
         {
-            Destroy(holder.gameObject);
+            if (holder != null)
+            {
+                Destroy(holder.gameObject);
+                holder = null;
+            }
             GameObject tileClone = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
             holder = tileClone;
             holder.GetComponent<Model>().saveStats();
