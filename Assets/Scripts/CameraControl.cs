@@ -60,7 +60,7 @@ public class CameraControl : MonoBehaviour
             {
                 if (objectHit != null && objectHit.tag == "SegmentTunnel") objectHit.GetComponent<MeshRenderer>().enabled = false;
                 objectHit = hit.transform;
-                if (objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag == "Tunnel") objectHit.GetComponent<MeshRenderer>().enabled = true;
+                if (objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag != "Placeable") objectHit.GetComponent<MeshRenderer>().enabled = true;
             }
 
             if (selectedObject != null && mousePosition[0] <= screenWidth - 205) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
@@ -71,7 +71,7 @@ public class CameraControl : MonoBehaviour
         if (selectedObject != null) selectedPosition = selectedObject.transform.position;
 
         //UI//
-        if (selectedObject != null && selectedObject.tag == "Tunnel")
+        if (selectedObject != null && selectedObject.tag != "Placeable" )
         {
             if (Input.GetMouseButton(0))
             {
@@ -166,6 +166,11 @@ public class CameraControl : MonoBehaviour
                 objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
                 updateSegments(objectHit.transform);
             }
+            if (selectedObject.tag == "Eraser" && objectHit.tag == "SegmentTunnel")
+            {
+                objectHit.GetComponent<SegmentTunnel>().type = null;
+                updateSegments(objectHit.transform);
+            }
             else if (selectedObject.tag == "Placeable")
             {
                 selectedObject.transform.parent = placeables.transform;
@@ -201,6 +206,14 @@ public class CameraControl : MonoBehaviour
     {
         if (selectedObject != null) Destroy(selectedObject.gameObject);
 
+        if (modelId == "eraser")
+        {
+            GameObject eraser = new GameObject();
+            eraser.tag = "Eraser";
+            selectedObject = eraser;
+            return;
+        }
+
         string tag = "";
         if (findObject(controller.allTunnels, modelId))
         {
@@ -233,6 +246,7 @@ public class CameraControl : MonoBehaviour
                 selectedIdFull = selectedObject.GetComponent<Model>().code;
             }
         }
+
 
     }
 

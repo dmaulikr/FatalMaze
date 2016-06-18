@@ -30,7 +30,7 @@ public class Segment : MonoBehaviour
         int segmentValue = 0;
         for(int a = 0, b = 1; a < tunnelSegments.Count; a++)
         {
-            if(tunnelSegments[a].GetComponent<SegmentTunnel>().type != "")
+            if (tunnelSegments[a].GetComponent<SegmentTunnel>().type != "" && tunnelSegments[a].GetComponent<SegmentTunnel>().type != null)
             {
                 segmentValue += b;
                 segmentType = tunnelSegments[a].GetComponent<SegmentTunnel>().type;
@@ -40,18 +40,21 @@ public class Segment : MonoBehaviour
         string finalCode = (string)(segmentType + segmentValue);
         GameObject currentTile = mainCamera.findObject(mainController.allTunnels, finalCode);
 
+        if (holder != null)
+        {
+            Destroy(holder.gameObject);
+            holder = null;
+        }
+
         if (currentTile)
         {
-            if (holder != null)
-            {
-                Destroy(holder.gameObject);
-                holder = null;
-            }
             GameObject tileClone = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
             holder = tileClone;
             holder.GetComponent<Model>().saveStats();
             holder.transform.parent = GameObject.Find("Tunnels").transform;
         }
+
+        print("update " + finalCode);
     }
 
 }
