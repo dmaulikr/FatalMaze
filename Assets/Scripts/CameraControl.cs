@@ -350,13 +350,13 @@ public class CameraControl : MonoBehaviour
         for (int a = 0; a < request.GetLength(0); a++)
         {
             int innerLength = request.GetLength(1);
-            mapString += "{";
+            mapString += "{\"";
             for (int b = 0; b < innerLength; b++)
             {
                 mapString += request[a, b];
-                if (b != innerLength - 1) mapString += ", ";
+                if (b != innerLength - 1) mapString += "\", \"";
             }
-            mapString += "}";
+            mapString += "\"}";
             if (a != request.GetLength(0) - 1) mapString += ", ";
         }
         mapString += "}";

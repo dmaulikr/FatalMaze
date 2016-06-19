@@ -5,17 +5,18 @@ using System.Text.RegularExpressions;
 public class Model : MonoBehaviour 
 {
     public string code;
+    [System.NonSerialized]
     public string shortCode;
     public string name;
+    [System.NonSerialized]
     public string[] coords = new string[4];
     public Sprite image;
     private string idOnly;
-    private CastInto castInto;
+    private CastInto castInto = new CastInto();
 
-    void Start()
+    void Awake()
     {
-        castInto = new CastInto();
-        //id = returnInt.codeToId(code);
+        shortCode = castInto.codeToShortCode(code);
     }
 
     public void saveStats()

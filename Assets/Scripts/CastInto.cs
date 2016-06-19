@@ -12,6 +12,12 @@ public class CastInto
         return value;
     }
 
+    public string codeToShortCode(string code)
+    {
+        Regex rgx = new Regex(@"[\d]");
+        return rgx.Replace(code, "");
+    }
+
     public string floatToString(float value)
     {
         return value.ToString();

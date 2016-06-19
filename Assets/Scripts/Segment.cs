@@ -54,7 +54,6 @@ public class Segment : MonoBehaviour
             holder.transform.parent = GameObject.Find("Tunnels").transform;
         }
 
-        print("update " + finalCode);
     }
 
 }

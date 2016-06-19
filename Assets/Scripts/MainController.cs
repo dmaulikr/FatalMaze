@@ -16,8 +16,8 @@ public class MainController : MonoBehaviour
     public List<GameObject> allPlaceables = new List<GameObject>();
     public GameObject images;
     // 1st - model, 2nd - x position, 3rd z position, 4th rotation
-    public string[,] map = {};
-    public string[,] placeables = {};
+    public string[,] map =  {{"ta4", "-3", "15", "0"}, {"ta5", "-3", "9", "180"}, {"ta5", "-3", "3", "180"}, {"ta5", "-3", "-3", "180"}, {"ta5", "-3", "-9", "180"}, {"ta1", "-3", "-15", "180"}};
+    public string[,] placeables = {{"p0", "-2", "-12", "0"}};
 
     public GameObject cardBoard;
     public GameObject pcCamera;
@@ -89,6 +89,7 @@ public class MainController : MonoBehaviour
     {
         for(int a = 0; a < map.GetLength(0); a++)
         {
+            print(map.GetLength(0));
             GameObject currentModel = CameraControl.mainCamera.findObject(allTunnels, map[a, 0]);
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(map[a, 1]), 0.0f, castInto.stringToInt(map[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(map[a, 3]), 0.0f)) as GameObject;
             modelClone.transform.localScale = new Vector3(1.0003f, 1.0003f, 1.0003f);
