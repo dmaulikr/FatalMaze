@@ -41,12 +41,24 @@ public class CameraControl : MonoBehaviour
         tunnels = GameObject.Find("Tunnels");
         placeables = GameObject.Find("Placeables");
         mapsPath = Application.dataPath + "/maps/";
-        mainCamera = this;
         camera = transform.GetComponent<Camera>();
         defaultSlide = slideSpeed;
         segmentList = GameObject.Find("LineRenderer").GetComponent<LineRendererScript>().segmentList;
 
-        loadLocaly();
+        //loadLocaly();
+    }
+
+    void Awake()
+    {
+        if (mainCamera == null)
+        {
+            DontDestroyOnLoad(transform.gameObject);
+            mainCamera = this;
+        }
+        else if (mainCamera != null)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Update()

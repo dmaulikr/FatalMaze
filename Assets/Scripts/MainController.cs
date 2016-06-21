@@ -87,16 +87,18 @@ public class MainController : MonoBehaviour
 
     private void buildMap()
     {
+        FindObject findObject = new FindObject();
+
+
         for(int a = 0; a < map.GetLength(0); a++)
         {
-            print(map.GetLength(0));
-            GameObject currentModel = CameraControl.mainCamera.findObject(allTunnels, map[a, 0]);
+            GameObject currentModel = findObject.FindObjectByCode(allTunnels, map[a, 0]);
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(map[a, 1]), 0.0f, castInto.stringToInt(map[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(map[a, 3]), 0.0f)) as GameObject;
             modelClone.transform.localScale = new Vector3(1.0003f, 1.0003f, 1.0003f);
         }
         for (int a = 0; a < placeables.GetLength(0); a++)
         {
-            GameObject currentModel = CameraControl.mainCamera.findObject(allPlaceables, placeables[a, 0]);
+            GameObject currentModel = findObject.FindObjectByCode(allPlaceables, placeables[a, 0]);
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(placeables[a, 1]), 0.0f, castInto.stringToInt(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
 
             // Adding camera

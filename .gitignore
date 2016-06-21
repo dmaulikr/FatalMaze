@@ -4,7 +4,6 @@
 [Oo]bj/
 [Bb]uild/
 *.pdb
-Fatal Maze.apk
 
 # Unity3D generated meta files
 *.pidb.meta
