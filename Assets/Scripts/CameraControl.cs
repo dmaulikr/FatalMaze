@@ -37,6 +37,7 @@ public class CameraControl : MonoBehaviour
 
     void Start()
     {
+        mainCamera = this;
         controller = MainController.mainController;
         tunnels = GameObject.Find("Tunnels");
         placeables = GameObject.Find("Placeables");
@@ -48,18 +49,6 @@ public class CameraControl : MonoBehaviour
         //loadLocaly();
     }
 
-    void Awake()
-    {
-        if (mainCamera == null)
-        {
-            DontDestroyOnLoad(transform.gameObject);
-            mainCamera = this;
-        }
-        else if (mainCamera != null)
-        {
-            Destroy(gameObject);
-        }
-    }
 
     void Update()
     {
@@ -254,6 +243,9 @@ public class CameraControl : MonoBehaviour
             {
                 GameObject placeable = findObject(controller.allPlaceables, modelId);
                 GameObject placeableClone = Instantiate(placeable, placeable.transform.position, placeable.transform.rotation) as GameObject;
+                
+                if(placeableClone.GetComponent<SpawnPoint>()) placeableClone.GetComponent<SpawnPoint>().enabled = false;
+
                 selectedObject = placeableClone;
                 selectedIdFull = selectedObject.GetComponent<Model>().code;
             }

@@ -16,8 +16,8 @@ public class MainController : MonoBehaviour
     public List<GameObject> allPlaceables = new List<GameObject>();
     public GameObject images;
     // 1st - model, 2nd - x position, 3rd z position, 4th rotation
-    public string[,] map =  {{"ta4", "-3", "15", "0"}, {"ta5", "-3", "9", "180"}, {"ta5", "-3", "3", "180"}, {"ta5", "-3", "-3", "180"}, {"ta5", "-3", "-9", "180"}, {"ta1", "-3", "-15", "180"}};
-    public string[,] placeables = {{"p0", "-2", "-12", "0"}};
+    public string[,] map =  {{"ta6", "9", "15", "90"}, {"ta12", "15", "15", "180"}, {"ta2", "-9", "9", "270"}, {"ta12", "-3", "9", "180"}, {"ta5", "9", "9", "0"}, {"ta5", "15", "9", "0"}, {"ta6", "-15", "3", "90"}, {"ta10", "-9", "3", "90"}, {"ta15", "-3", "3", "0"}, {"ta10", "3", "3", "90"}, {"ta13", "9", "3", "270"}, {"ta5", "15", "3", "0"}, {"ta1", "-15", "-3", "180"}, {"ta5", "-3", "-3", "0"}, {"ta3", "9", "-3", "0"}, {"ta9", "15", "-3", "270"}, {"ta6", "-9", "-9", "90"}, {"ta15", "-3", "-9", "0"}, {"ta10", "3", "-9", "90"}, {"ta12", "9", "-9", "180"}, {"ta1", "-9", "-15", "180"}, {"ta3", "-3", "-15", "0"}, {"ta10", "3", "-15", "90"}, {"ta9", "9", "-15", "270"}};
+    public string[,] placeables = {{"p0", "-15", "-1", "210"}};
 
     public GameObject cardBoard;
     public GameObject pcCamera;
