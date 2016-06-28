@@ -59,17 +59,19 @@ public class CameraControl : MonoBehaviour
 
             if(objectHit != hit.transform)
             {
-                if (objectHit != null && objectHit.tag == "SegmentTunnel") objectHit.GetComponent<MeshRenderer>().enabled = false;
+                if (objectHit != null && selectedObject != null && (objectHit.tag == "SegmentTunnel" && selectedObject.tag == "Tunnel" || objectHit.tag == "SegmentRoom" && selectedObject.tag == "Room")) objectHit.GetComponent<MeshRenderer>().enabled = false;
                 objectHit = hit.transform;
-                if (objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag != "Placeable") objectHit.GetComponent<MeshRenderer>().enabled = true;
+                if ((objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag == "Tunnel") || (objectHit.tag == "SegmentRoom" && selectedObject != null && selectedObject.tag == "Room")) objectHit.GetComponent<MeshRenderer>().enabled = true;
             }
 
-            if (selectedObject != null && mousePosition[0] <= screenWidth - 205) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
+            if (selectedObject != null && mousePosition[0] <= screenWidth - 205 && !selectedObject.GetComponent<Model>().rigid) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z); //updating selected object position
+            else if (selectedObject != null && mousePosition[0] <= screenWidth - 205 && selectedObject.GetComponent<Model>().rigid && objectHit.tag == "Segment") selectedObject.transform.position = objectHit.transform.position; //updating selected object position
 
-            if (selectedObject == null && objectHit.tag == "SegmentTunnel") objectHit.GetComponent<MeshRenderer>().enabled = false;
+            if (selectedObject == null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
 
         }
-        if (selectedObject != null) selectedPosition = selectedObject.transform.position;
+
+        if (selectedObject != null) selectedPosition = selectedObject.transform.position; // Setting selected position var
 
         //UI//
         if (selectedObject != null && selectedObject.tag != "Placeable" )
@@ -162,7 +164,7 @@ public class CameraControl : MonoBehaviour
 
         if (selectedObject != null && !EditorUI.editorUI.panelVisible) //This will entangle segment and current tunnel
         {
-            if(selectedObject.tag == "Tunnel" && objectHit.tag == "SegmentTunnel")
+            if((selectedObject.tag == "Tunnel" && objectHit.tag == "SegmentTunnel") || (selectedObject.tag == "Room" && objectHit.tag == "SegmentRoom"))
             {
                 objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
                 updateSegments(objectHit.transform);
@@ -176,6 +178,7 @@ public class CameraControl : MonoBehaviour
             {
                 selectedObject.transform.parent = placeables.transform;
                 selectedObject.GetComponent<Model>().saveStats();
+                
                 selectedObject = null;
                 selectObject(selectedIdFull);
             }
@@ -224,6 +227,10 @@ public class CameraControl : MonoBehaviour
         {
             tag = findObject(controller.allPlaceables, modelId).gameObject.tag;
         }
+        else if (findObject(controller.allRooms, modelId))
+        {
+            tag = findObject(controller.allRooms, modelId).gameObject.tag;
+        }
 
         if(tag == "Tunnel")
         {
@@ -237,15 +244,24 @@ public class CameraControl : MonoBehaviour
                 selectedIdShort = selectedObject.GetComponent<Model>().shortCode;
             }
         }
+        else if (tag == "Room")
+        {
+            if (findObject(controller.allRooms, modelId))
+            {
+                GameObject room = findObject(controller.allRooms, modelId);
+                GameObject roomClone = Instantiate(room, room.transform.position, room.transform.rotation) as GameObject;
+                roomClone.GetComponentInChildren<MeshRenderer>().enabled = false;
+                roomClone.GetComponent<Collider>().enabled = false;
+                selectedObject = roomClone;
+                selectedIdShort = selectedObject.GetComponent<Model>().shortCode;
+            }
+        }
         else if(tag == "Placeable")
         {
             if (findObject(controller.allPlaceables, modelId))
             {
                 GameObject placeable = findObject(controller.allPlaceables, modelId);
                 GameObject placeableClone = Instantiate(placeable, placeable.transform.position, placeable.transform.rotation) as GameObject;
-                
-                if(placeableClone.GetComponent<SpawnPoint>()) placeableClone.GetComponent<SpawnPoint>().enabled = false;
-
                 selectedObject = placeableClone;
                 selectedIdFull = selectedObject.GetComponent<Model>().code;
             }

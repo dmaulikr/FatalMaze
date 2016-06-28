@@ -26,19 +26,53 @@ public class Segment : MonoBehaviour
         tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentTunnelList, id + lineRenderer.width));
         tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentTunnelList, tunnelSegments[1].GetComponent<SegmentTunnel>().id - 1));
 
+        if (mainCamera.findById(lineRenderer.segmentRoomList, id - 1)) tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentRoomList, id - 1));
+        else tunnelSegments.Add(null);
+        if (mainCamera.findById(lineRenderer.segmentRoomList, id)) tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentRoomList, id));
+        else tunnelSegments.Add(null);
+        if (mainCamera.findById(lineRenderer.segmentRoomList, id + lineRenderer.width)) tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentRoomList, id + lineRenderer.width));
+        else tunnelSegments.Add(null);
+        if (mainCamera.findById(lineRenderer.segmentRoomList, id + lineRenderer.width - 1)) tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentRoomList, id + lineRenderer.width - 1));
+        else tunnelSegments.Add(null);
+
         string segmentType = "";
         int segmentValue = 0;
-        for(int a = 0, b = 1; a < tunnelSegments.Count; a++)
+        for(int a = 0, b = 1, additionalValue = 0; a < tunnelSegments.Count; a++) // additional value is used when connecting corridors and rooms
         {
-            if (tunnelSegments[a].GetComponent<SegmentTunnel>().type != "" && tunnelSegments[a].GetComponent<SegmentTunnel>().type != null)
+            if (tunnelSegments[a] != null && tunnelSegments[a].GetComponent<SegmentTunnel>().type != "" && tunnelSegments[a].GetComponent<SegmentTunnel>().type != null)
             {
                 segmentValue += b;
-                segmentType = tunnelSegments[a].GetComponent<SegmentTunnel>().type;
+                if (tunnelSegments[a] != null && tunnelSegments[a].GetComponent<SegmentTunnel>().type != "" && tunnelSegments[a].GetComponent<SegmentTunnel>().type != null)
+                {
+                    segmentType = "";
+                    segmentType = tunnelSegments[a].GetComponent<SegmentTunnel>().type;
+                }
+
+                if(a <= 3) additionalValue += 16; //add only when checking tunnel type, not room
+                if (a > 3) // add additional value only if there are room type segments nearby
+                {
+                    segmentValue += additionalValue;
+                    additionalValue = 0;
+                }
             }
+
             b *= 2;
+            if (a == 3) b = 1;
         }
+
         string finalCode = (string)(segmentType + segmentValue);
-        GameObject currentTile = mainCamera.findObject(mainController.allTunnels, finalCode);
+
+        GameObject currentTile = new GameObject();
+
+        if(mainCamera.findObject(mainController.allTunnels, finalCode))
+        {
+            currentTile = mainCamera.findObject(mainController.allTunnels, finalCode);
+        }
+        else if (mainCamera.findObject(mainController.allRooms, finalCode))
+        {
+            currentTile = mainCamera.findObject(mainController.allRooms, finalCode);
+        }
+
 
         if (holder != null)
         {

@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 397eb20d9934f84449e659c629318f86
-timeCreated: 1465671629
+guid: 1fcce7c2579b8a3418593370b4bd2c2b
+timeCreated: 1467051261
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: tunnel5
-    100002: //RootNode
-    400000: tunnel5
-    400002: //RootNode
-    2300000: tunnel5
-    3300000: tunnel5
-    4300000: tunnel5
+    100000: //RootNode
+    100002: Tunnela1
+    400000: //RootNode
+    400002: Tunnela1
+    2300000: Tunnela1
+    3300000: Tunnela1
+    4300000: Tunnela1
   materials:
     importMaterials: 1
     materialName: 0

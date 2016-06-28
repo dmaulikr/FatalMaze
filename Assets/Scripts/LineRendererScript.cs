@@ -9,9 +9,11 @@ public class LineRendererScript : MonoBehaviour
     public GameObject line;
     public GameObject segment;
     public GameObject segmentTunnel;
+    public GameObject segmentRoom;
     private CameraControl mainCamera;
     public List<GameObject> segmentList;
     public List<GameObject> segmentTunnelList;
+    public List<GameObject> segmentRoomList;
 
     public int width = 20;
     public int height = 20;
@@ -117,6 +119,15 @@ public class LineRendererScript : MonoBehaviour
             segmentTunnelN.GetComponent<SegmentTunnel>().id = c;
             segmentTunnelN.transform.parent = transform;
             segmentTunnelList.Add(segmentTunnelN);
+
+            if(e != 0 && d != width && e != height) //Room segments
+            {
+                GameObject segmentRoomS = Instantiate(segmentRoom, new Vector3(currentX * segmentSize + segmentSize, 0, currentY * segmentSize), transform.rotation) as GameObject;
+                segmentRoomS.GetComponent<SegmentTunnel>().id = c;
+                segmentRoomS.transform.parent = transform;
+                segmentRoomList.Add(segmentRoomS);
+            }
+
 
             // Horizontal segments
 

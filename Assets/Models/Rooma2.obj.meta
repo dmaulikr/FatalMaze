@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 9f800ed93888b314f91077b786fd896e
-timeCreated: 1466173280
+guid: ee5e710d5bca7ee48bdfa41c712e2a76
+timeCreated: 1467036409
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Tunnel1
-    100002: //RootNode
-    400000: Tunnel1
-    400002: //RootNode
-    2300000: Tunnel1
-    3300000: Tunnel1
-    4300000: Tunnel1
+    100000: //RootNode
+    100002: Tunnela1
+    400000: //RootNode
+    400002: Tunnela1
+    2300000: Tunnela1
+    3300000: Tunnela1
+    4300000: Tunnela1
   materials:
     importMaterials: 1
     materialName: 0
@@ -41,7 +41,7 @@ ModelImporter:
     addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0

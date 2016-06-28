@@ -7,8 +7,12 @@ public class SpawnPoint : MonoBehaviour
 
 	void Start () 
     {
-        Instantiate(spawn, transform.position, transform.rotation);
-        Destroy(gameObject);
+        if(MainController.mainController.currentScene == 1)
+        {
+            Instantiate(spawn, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
+
 	}
 
 }

@@ -7,9 +7,11 @@ public class EditorUI : MonoBehaviour
 {
     public static EditorUI editorUI;
     public List<string> availableTunnels;
+    public List<string> availableRooms;
     public List<string> availablePlaceables;
     public Button modelButton;
     private List<GameObject> tunnelList;
+    private List<GameObject> roomList;
     private List<GameObject> placeableList;
     private List<Sprite> imageList;
     [System.NonSerialized]
@@ -21,6 +23,7 @@ public class EditorUI : MonoBehaviour
     {
         editorUI = this;
         tunnelList = MainController.mainController.allTunnels;
+        roomList = MainController.mainController.allRooms;
         placeableList = MainController.mainController.allPlaceables;
         imageList = MainController.mainController.images.GetComponent<Images>().images;
         //buildButtons();
@@ -49,6 +52,11 @@ public class EditorUI : MonoBehaviour
         {
             list = availableTunnels;
             currentModels = tunnelList;
+        }
+        else if (type == "rooms")
+        {
+            list = availableRooms;
+            currentModels = roomList;
         }
         else if (type == "placeables")
         {

@@ -13,11 +13,12 @@ public class MainController : MonoBehaviour
     public string gameType = "cardboard";
     [System.NonSerialized]
     public List<GameObject> allTunnels = new List<GameObject>();
+    public List<GameObject> allRooms = new List<GameObject>();
     public List<GameObject> allPlaceables = new List<GameObject>();
     public GameObject images;
     // 1st - model, 2nd - x position, 3rd z position, 4th rotation
-    public string[,] map =  {{"ta6", "9", "15", "90"}, {"ta12", "15", "15", "180"}, {"ta2", "-9", "9", "270"}, {"ta12", "-3", "9", "180"}, {"ta5", "9", "9", "0"}, {"ta5", "15", "9", "0"}, {"ta6", "-15", "3", "90"}, {"ta10", "-9", "3", "90"}, {"ta15", "-3", "3", "0"}, {"ta10", "3", "3", "90"}, {"ta13", "9", "3", "270"}, {"ta5", "15", "3", "0"}, {"ta1", "-15", "-3", "180"}, {"ta5", "-3", "-3", "0"}, {"ta3", "9", "-3", "0"}, {"ta9", "15", "-3", "270"}, {"ta6", "-9", "-9", "90"}, {"ta15", "-3", "-9", "0"}, {"ta10", "3", "-9", "90"}, {"ta12", "9", "-9", "180"}, {"ta1", "-9", "-15", "180"}, {"ta3", "-3", "-15", "0"}, {"ta10", "3", "-15", "90"}, {"ta9", "9", "-15", "270"}};
-    public string[,] placeables = {{"p0", "-15", "-1", "210"}};
+    public string[,] map =  {{"ta6", "-15", "15", "90"}, {"ta10", "-9", "15", "90"}, {"ta12", "-3", "15", "180"}, {"ta4", "9", "15", "0"}, {"ta4", "15", "15", "0"}, {"ta5", "-15", "9", "0"}, {"ta6", "-9", "9", "90"}, {"ta11", "-3", "9", "0"}, {"ta10", "3", "9", "90"}, {"ta11", "9", "9", "0"}, {"ta13", "15", "9", "270"}, {"ta5", "-15", "3", "0"}, {"ta5", "-9", "3", "0"}, {"ra4", "-3", "3", "90"}, {"ra12", "3", "3", "180"}, {"ra8", "9", "3", "180"}, {"ta5", "15", "3", "0"}, {"ta7", "-15", "-3", "90"}, {"ta9", "-9", "-3", "270"}, {"ra2", "-3", "-3", "0"}, {"ra23", "3", "-3", "0"}, {"ra1", "9", "-3", "270"}, {"ta5", "15", "-3", "0"}, {"ta7", "-15", "-9", "90"}, {"ta10", "-9", "-9", "90"}, {"ta10", "-3", "-9", "90"}, {"ta9", "3", "-9", "270"}, {"ra4", "9", "-9", "90"}, {"ra25", "15", "-9", "180"}, {"ta1", "-15", "-15", "180"}, {"ra2", "9", "-15", "0"}, {"ra1", "15", "-15", "270"}};
+    public string[,] placeables = {{"p0", "-15", "-9", "0"}};
 
     public GameObject cardBoard;
     public GameObject pcCamera;
@@ -39,9 +40,13 @@ public class MainController : MonoBehaviour
                 {
                     allTunnels.Add(a.gameObject);
                 }
-                if (a.gameObject.tag == "Placeable")
+                else if (a.gameObject.tag == "Placeable")
                 {
                     allPlaceables.Add(a.gameObject);
+                }
+                else if (a.gameObject.tag == "Room")
+                {
+                    allRooms.Add(a.gameObject);
                 }
             }
         }
@@ -92,7 +97,11 @@ public class MainController : MonoBehaviour
 
         for(int a = 0; a < map.GetLength(0); a++)
         {
-            GameObject currentModel = findObject.FindObjectByCode(allTunnels, map[a, 0]);
+            GameObject currentModel = new GameObject();
+                
+            if(findObject.FindObjectByCode(allTunnels, map[a, 0]) != null) currentModel = findObject.FindObjectByCode(allTunnels, map[a, 0]);
+            else if(findObject.FindObjectByCode(allRooms, map[a, 0]) != null) currentModel = findObject.FindObjectByCode(allRooms, map[a, 0]);
+
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(map[a, 1]), 0.0f, castInto.stringToInt(map[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(map[a, 3]), 0.0f)) as GameObject;
             modelClone.transform.localScale = new Vector3(1.0003f, 1.0003f, 1.0003f);
         }

@@ -13,6 +13,7 @@ public class Model : MonoBehaviour
     public Sprite image;
     private string idOnly;
     private CastInto castInto = new CastInto();
+    public bool rigid = false;
 
     void Awake()
     {
