@@ -37,7 +37,7 @@ public class Segment : MonoBehaviour
 
         string segmentType = "";
         int segmentValue = 0;
-        for(int a = 0, b = 1, additionalValue = 0; a < tunnelSegments.Count; a++) // additional value is used when connecting corridors and rooms
+        for(int a = 0, b = 1; a < tunnelSegments.Count; a++) // additional value is used when connecting corridors and rooms
         {
             if (tunnelSegments[a] != null && tunnelSegments[a].GetComponent<SegmentTunnel>().type != "" && tunnelSegments[a].GetComponent<SegmentTunnel>().type != null)
             {
@@ -47,24 +47,17 @@ public class Segment : MonoBehaviour
                     segmentType = "";
                     segmentType = tunnelSegments[a].GetComponent<SegmentTunnel>().type;
                 }
-
-                if(a <= 3) additionalValue += 16; //add only when checking tunnel type, not room
-                if (a > 3) // add additional value only if there are room type segments nearby
-                {
-                    segmentValue += additionalValue;
-                    additionalValue = 0;
-                }
             }
 
             b *= 2;
-            if (a == 3) b = 1;
         }
 
         string finalCode = (string)(segmentType + segmentValue);
 
         GameObject currentTile = new GameObject();
+        currentTile.hideFlags = HideFlags.HideInHierarchy;
 
-        if(mainCamera.findObject(mainController.allTunnels, finalCode))
+        if (mainCamera.findObject(mainController.allTunnels, finalCode))
         {
             currentTile = mainCamera.findObject(mainController.allTunnels, finalCode);
         }
@@ -80,7 +73,7 @@ public class Segment : MonoBehaviour
             holder = null;
         }
 
-        if (currentTile)
+        if (currentTile.GetComponent<Model>())
         {
             GameObject tileClone = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
             holder = tileClone;

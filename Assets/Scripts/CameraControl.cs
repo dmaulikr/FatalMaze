@@ -59,13 +59,13 @@ public class CameraControl : MonoBehaviour
 
             if(objectHit != hit.transform)
             {
-                if (objectHit != null && selectedObject != null && (objectHit.tag == "SegmentTunnel" && selectedObject.tag == "Tunnel" || objectHit.tag == "SegmentRoom" && selectedObject.tag == "Room")) objectHit.GetComponent<MeshRenderer>().enabled = false;
+                if (objectHit != null && selectedObject != null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
                 objectHit = hit.transform;
-                if ((objectHit.tag == "SegmentTunnel" && selectedObject != null && selectedObject.tag == "Tunnel") || (objectHit.tag == "SegmentRoom" && selectedObject != null && selectedObject.tag == "Room")) objectHit.GetComponent<MeshRenderer>().enabled = true;
+                if ((objectHit.tag == "SegmentTunnel" && selectedObject != null && (selectedObject.tag == "Tunnel" || selectedObject.tag == "Eraser") || (objectHit.tag == "SegmentRoom" && selectedObject != null && (selectedObject.tag == "Room" || selectedObject.tag == "Eraser")))) objectHit.GetComponent<MeshRenderer>().enabled = true;
             }
 
-            if (selectedObject != null && mousePosition[0] <= screenWidth - 205 && !selectedObject.GetComponent<Model>().rigid) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z); //updating selected object position
-            else if (selectedObject != null && mousePosition[0] <= screenWidth - 205 && selectedObject.GetComponent<Model>().rigid && objectHit.tag == "Segment") selectedObject.transform.position = objectHit.transform.position; //updating selected object position
+            if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205 && !selectedObject.GetComponent<Model>().rigid) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z); //updating selected object position
+            else if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205 && selectedObject.GetComponent<Model>().rigid && objectHit.tag == "Segment") selectedObject.transform.position = objectHit.transform.position; //updating selected object position
 
             if (selectedObject == null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
 
@@ -169,7 +169,7 @@ public class CameraControl : MonoBehaviour
                 objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
                 updateSegments(objectHit.transform);
             }
-            if (selectedObject.tag == "Eraser" && objectHit.tag == "SegmentTunnel")
+            if (selectedObject.tag == "Eraser" && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom"))
             {
                 objectHit.GetComponent<SegmentTunnel>().type = null;
                 updateSegments(objectHit.transform);
@@ -209,6 +209,8 @@ public class CameraControl : MonoBehaviour
     public void selectObject(string modelId)
     {
         if (selectedObject != null) Destroy(selectedObject.gameObject);
+
+        if (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom") objectHit.GetComponent<MeshRenderer>().enabled = false;
 
         if (modelId == "eraser")
         {
