@@ -18,7 +18,7 @@ public class Segment : MonoBehaviour
         holder = null;
     }
 
-    public void updateSegment()
+    public bool updateSegment(Transform callerSegment, bool check)
     {
         if (tunnelSegments != null) tunnelSegments.Clear();
         tunnelSegments.Add(mainCamera.findById(lineRenderer.segmentTunnelList, id));
@@ -67,20 +67,29 @@ public class Segment : MonoBehaviour
         }
 
 
-        if (holder != null)
+        if (holder != null && !check)
         {
             Destroy(holder.gameObject);
             holder = null;
         }
 
-        if (currentTile.GetComponent<Model>())
+        if (currentTile.GetComponent<Model>() && !check)
         {
             GameObject tileClone = Instantiate(currentTile, transform.position, currentTile.transform.rotation) as GameObject;
             holder = tileClone;
             holder.GetComponent<Model>().saveStats();
             holder.transform.parent = GameObject.Find("Tunnels").transform;
         }
+        else if(currentTile.GetComponent<Model>() && check)
+        {
+            return true;
+        }
+        else if (!currentTile.GetComponent<Model>())
+        {
+            callerSegment.GetComponent<SegmentTunnel>().type = null;
+        }
 
+        return false;
     }
 
 }

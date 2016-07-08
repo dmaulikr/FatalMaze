@@ -189,13 +189,27 @@ public class CameraControl : MonoBehaviour
     public void updateSegments(Transform collider)
     {
         Collider[] colliders = Physics.OverlapSphere(collider.position, 1);
+
+        bool found = false;
         for(int a = 0; a < colliders.Length; a++)
         {
             if(colliders[a].gameObject.tag == "Segment")
             {
-                colliders[a].gameObject.GetComponent<Segment>().updateSegment();
+                if (colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, true)) found = true;
             }
         }
+
+        if(found)
+        {
+            for (int a = 0; a < colliders.Length; a++)
+            {
+                if (colliders[a].gameObject.tag == "Segment")
+                {
+                    colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, false);
+                }
+            }
+        }
+
     }
 
     public void deleteObject()

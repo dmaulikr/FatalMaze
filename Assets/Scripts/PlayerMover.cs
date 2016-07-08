@@ -27,7 +27,7 @@ public class PlayerMover : MonoBehaviour
     {
         if(cameraFound)
         {
-            mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
+            mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 1.25f, transform.position.z);
             transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed);
             transform.rotation = Quaternion.Euler(0, mainCamera.transform.Find("Head").transform.localEulerAngles.y, 0);
         }

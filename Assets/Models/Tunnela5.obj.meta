@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: aa237d220dae85c40917210d42827e4e
-timeCreated: 1466952080
+timeCreated: 1467966973
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -52,8 +52,8 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 0
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
