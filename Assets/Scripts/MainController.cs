@@ -17,8 +17,8 @@ public class MainController : MonoBehaviour
     public List<GameObject> allPlaceables = new List<GameObject>();
     public GameObject images;
     // 1st - model, 2nd - x position, 3rd z position, 4th rotation
-    public string[,] map = {{"ra64", "15", "21", "90"}, {"ra192", "21", "21", "180"}, {"ra128", "27", "21", "180"}, {"ra64", "3", "15", "90"}, {"ra128", "9", "15", "180"}, {"ra96", "15", "15", "90"}, {"ra240", "21", "15", "0"}, {"ra144", "27", "15", "270"}, {"ra32", "3", "9", "0"}, {"ra80", "9", "9", "90"}, {"ra224", "15", "9", "90"}, {"ra176", "21", "9", "270"}, {"ra16", "27", "9", "270"}, {"ta4", "-15", "3", "0"}, {"ra96", "9", "3", "90"}, {"ra240", "15", "3", "0"}, {"ra208", "21", "3", "180"}, {"ra128", "27", "3", "180"}, {"ta5", "-15", "-3", "0"}, {"ra64", "-3", "-3", "90"}, {"ra128", "3", "-3", "180"}, {"ra32", "9", "-3", "0"}, {"ra112", "15", "-3", "0"}, {"ra176", "21", "-3", "270"}, {"ra16", "27", "-3", "270"}, {"ta5", "-15", "-9", "0"}, {"ra96", "-3", "-9", "90"}, {"ra208", "3", "-9", "180"}, {"ra192", "9", "-9", "180"}, {"ra224", "15", "-9", "90"}, {"ra144", "21", "-9", "270"}, {"ta2", "-21", "-15", "270"}, {"ta15", "-15", "-15", "0"}, {"ta10", "-9", "-15", "90"}, {"ra104", "-3", "-15", "90"}, {"ra240", "3", "-15", "0"}, {"ra240", "9", "-15", "0"}, {"ra240", "15", "-15", "0"}, {"ra144", "21", "-15", "270"}, {"ta2", "-21", "-21", "270"}, {"ta11", "-15", "-21", "0"}, {"ta8", "-9", "-21", "90"}, {"ra32", "-3", "-21", "0"}, {"ra48", "3", "-21", "0"}, {"ra48", "9", "-21", "0"}, {"ra48", "15", "-21", "0"}, {"ra16", "21", "-21", "270"}};
-    public string[,] placeables = {{"p0", "-15", "-3", "0"}};
+    public string[,] map = {{"ra64", "-3", "27", "90"}, {"ra192", "3", "27", "180"}, {"ra192", "9", "27", "180"}, {"ra192", "15", "27", "180"}, {"ra128", "21", "27", "180"}, {"ra96", "-3", "21", "90"}, {"ra176", "3", "21", "270"}, {"ra48", "9", "21", "0"}, {"ra48", "15", "21", "0"}, {"ra20", "21", "21", "270"}, {"ra32", "-3", "15", "0"}, {"ra16", "3", "15", "270"}, {"ta4", "9", "15", "0"}, {"ta5", "21", "15", "0"}, {"ta6", "-9", "9", "90"}, {"ta10", "-3", "9", "90"}, {"ta10", "3", "9", "90"}, {"ta15", "9", "9", "0"}, {"ta10", "15", "9", "90"}, {"ta15", "21", "9", "0"}, {"ta8", "27", "9", "90"}, {"ta5", "-9", "3", "0"}, {"ra64", "3", "3", "90"}, {"ra193", "9", "3", "180"}, {"ra128", "15", "3", "180"}, {"ta5", "21", "3", "0"}, {"ta5", "-9", "-3", "0"}, {"ra96", "3", "-3", "90"}, {"ra240", "9", "-3", "0"}, {"ra144", "15", "-3", "270"}, {"ta1", "21", "-3", "180"}, {"ta1", "-9", "-9", "180"}, {"ra32", "3", "-9", "0"}, {"ra48", "9", "-9", "0"}, {"ra16", "15", "-9", "270"}};
+    public string[,] placeables = {{"p2", "9", "-3", "144"}, {"p1", "0", "24", "270"}, {"p1", "3", "25", "0"}, {"p0", "-9", "-1", "0"}};
 
     public GameObject cardBoard;
     public GameObject pcCamera;
@@ -31,7 +31,7 @@ public class MainController : MonoBehaviour
     {
         try
         {
-            // Get all tunnels from assets
+            // Load all tunnels, rooms and placeables from assets
             GameObject[] allObjects = Resources.LoadAll<GameObject>("Prefabs");
 
             foreach (GameObject a in allObjects)
@@ -59,7 +59,7 @@ public class MainController : MonoBehaviour
 
     void Awake()
     {
-        if(mainController == null)
+        if(mainController == null) // main controller has to behave like singleton
         {
             DontDestroyOnLoad(transform.gameObject);
             mainController = this;
@@ -71,7 +71,7 @@ public class MainController : MonoBehaviour
 
     }
 	
-	// Update is called once per frame
+
 	void Update () 
     {
         currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -84,7 +84,7 @@ public class MainController : MonoBehaviour
 
     private void loadScene()
     {
-        if (currentScene == 1)
+        if (currentScene == 1) // if it's a main scene, build map
         {
             buildMap();
         }
@@ -95,7 +95,7 @@ public class MainController : MonoBehaviour
         FindObject findObject = new FindObject();
 
 
-        for(int a = 0; a < map.GetLength(0); a++)
+        for(int a = 0; a < map.GetLength(0); a++) //Build tunnels & rooms
         {
             GameObject currentModel = new GameObject();
                 
@@ -103,12 +103,11 @@ public class MainController : MonoBehaviour
             else if(findObject.FindObjectByCode(allRooms, map[a, 0]) != null) currentModel = findObject.FindObjectByCode(allRooms, map[a, 0]);
 
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(map[a, 1]), 0.0f, castInto.stringToInt(map[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(map[a, 3]), 0.0f)) as GameObject;
-            modelClone.transform.localScale = new Vector3(1.0003f, 1.0003f, 1.0003f);
         }
-        for (int a = 0; a < placeables.GetLength(0); a++)
+        for (int a = 0; a < placeables.GetLength(0); a++) //Build placeables
         {
             GameObject currentModel = findObject.FindObjectByCode(allPlaceables, placeables[a, 0]);
-            GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(placeables[a, 1]), 0.0f, castInto.stringToInt(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
+            GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(placeables[a, 1]), currentModel.transform.position.y, castInto.stringToInt(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
 
             // Adding camera
             if (currentModel.GetComponent<Model>().name == "Player")

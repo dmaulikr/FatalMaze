@@ -8,7 +8,7 @@ public class EditorUI : MonoBehaviour
     public static EditorUI editorUI;
     public List<string> availableTunnels;
     public List<string> availableRooms;
-    public List<string> availablePlaceables;
+    private List<string> availablePlaceables = new List<string>();
     public Button modelButton;
     private List<GameObject> tunnelList;
     private List<GameObject> roomList;
@@ -27,6 +27,11 @@ public class EditorUI : MonoBehaviour
         placeableList = MainController.mainController.allPlaceables;
         imageList = MainController.mainController.images.GetComponent<Images>().images;
         //buildButtons();
+
+        for(int a = 0; a < placeableList.Count; a++)
+        {
+            availablePlaceables.Add(placeableList[a].GetComponent<Model>().code);
+        }
 	}
 
     void Update()

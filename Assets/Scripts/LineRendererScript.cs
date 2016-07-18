@@ -15,7 +15,7 @@ public class LineRendererScript : MonoBehaviour
     public List<GameObject> segmentTunnelList;
     public List<GameObject> segmentRoomList;
 
-    public int width = 20;
+    public int width = 20; // grid width and height
     public int height = 20;
     private int segmentSize = 6;
     private int previousZoom = 0;
@@ -23,7 +23,7 @@ public class LineRendererScript : MonoBehaviour
     private float zoomLevel = 0;
 
     //1st - 2nd - x; 3rd - 4th -y
-    public int[] range = new int[4];
+    [System.NonSerialized] public int[] range = new int[4];
 
 	void Start () 
     {
@@ -32,6 +32,8 @@ public class LineRendererScript : MonoBehaviour
 
         zoomLevel = mainCamera.transform.position.y;
         lineWidth = zoomLevel / 250;
+
+        // we can't have width or height as uneven number e.g 7
         if (width % 2 != 0) width++;
         if (height % 2 != 0) height++;
 
@@ -47,6 +49,8 @@ public class LineRendererScript : MonoBehaviour
     void Update()
     {
         zoomLevel = mainCamera.transform.position.y;
+
+        // update line width depending on zoom
         if((int)zoomLevel%5 == 0 && (int)previousZoom != (int)zoomLevel)
         {
             previousZoom = (int)zoomLevel;
@@ -58,6 +62,7 @@ public class LineRendererScript : MonoBehaviour
 
     private void buildLines()
     {
+        // horizontal lines
         for(int a = range[0], b = 0; a <= range[1]; a++, b++)
         {
             GameObject lineClone = Instantiate(line, transform.position, transform.rotation) as GameObject;
@@ -67,6 +72,8 @@ public class LineRendererScript : MonoBehaviour
             lineClone.GetComponent<Line>().c1 = lineColor;
             lineClone.transform.parent = transform;
         }
+
+        // vertical lines
         for(int a = range[2], b = 0; a <= range[3]; a++, b++)
         {
             GameObject lineClone = Instantiate(line, transform.position, transform.rotation) as GameObject;
@@ -113,14 +120,14 @@ public class LineRendererScript : MonoBehaviour
 
         for(int a = 0, c = 0, d = 1, e = 0; a < upperTileCount + width; a++, c++, d++)
         {
-            // Vertical segments
+            // Vertical tunnel segments
 
             GameObject segmentTunnelN = Instantiate(segmentTunnel, new Vector3(currentX * segmentSize + segmentSize / 2, 0, currentY * segmentSize), transform.rotation) as GameObject;
             segmentTunnelN.GetComponent<SegmentTunnel>().id = c;
             segmentTunnelN.transform.parent = transform;
             segmentTunnelList.Add(segmentTunnelN);
 
-            if(e != 0 && d != width && e != height) //Room segments
+            if(e != 0 && d != width && e != height) //Room segments, only add if it's not at the edge.
             {
                 GameObject segmentRoomS = Instantiate(segmentRoom, new Vector3(currentX * segmentSize + segmentSize, 0, currentY * segmentSize), transform.rotation) as GameObject;
                 segmentRoomS.GetComponent<SegmentTunnel>().id = c;
@@ -164,6 +171,7 @@ public class LineRendererScript : MonoBehaviour
 
     private void reloadLines()
     {
+        // replace lines to change their width
         GameObject[] lines = GameObject.FindGameObjectsWithTag("Line");
         for(int a = 0; a < lines.Length; a++)
         {

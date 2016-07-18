@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 public class CastInto
 {
-    public int codeToId(string code)
+    public int codeToId(string code) // leave only number
     {
         int value;
         Regex rgx = new Regex(@"[^\d]");
@@ -12,7 +12,7 @@ public class CastInto
         return value;
     }
 
-    public string codeToShortCode(string code)
+    public string codeToShortCode(string code) //remove numbers
     {
         Regex rgx = new Regex(@"[\d]");
         return rgx.Replace(code, "");

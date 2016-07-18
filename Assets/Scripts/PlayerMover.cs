@@ -29,9 +29,24 @@ public class PlayerMover : MonoBehaviour
         {
             mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 1.25f, transform.position.z);
             transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed);
-            transform.rotation = Quaternion.Euler(0, mainCamera.transform.Find("Head").transform.localEulerAngles.y, 0);
+            if(mainCamera.transform.Find("Head")) transform.rotation = Quaternion.Euler(0, mainCamera.transform.Find("Head").transform.localEulerAngles.y, 0);
+            else transform.rotation = Quaternion.Euler(0, mainCamera.transform.localEulerAngles.y, 0);
         }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Placeable" && other.GetComponent<Model>().pickable)
+        {
+            takeItem(other.gameObject);
+        }
+    }
+
+    private void takeItem(GameObject item)
+    {
+        item.GetComponent<PickItem>().removeScripts();
+        item.GetComponent<PickItem>().objectToFollow = transform.Find("Hand").gameObject;
+        item.GetComponent<PickItem>().picked = true;
     }
 
 }

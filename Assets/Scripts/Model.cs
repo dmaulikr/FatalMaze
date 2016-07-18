@@ -13,7 +13,8 @@ public class Model : MonoBehaviour
     public Sprite image;
     private string idOnly;
     private CastInto castInto = new CastInto();
-    public bool rigid = false;
+    public bool freeRotation = true;
+    public bool pickable = false;
 
     void Awake()
     {

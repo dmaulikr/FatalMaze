@@ -34,6 +34,7 @@ public class CameraControl : MonoBehaviour
     private string mapsPath;
     private GameObject tunnels;
     private GameObject placeables;
+    private List<GameObject> mapPlaceables = new List<GameObject>();
 
     void Start()
     {
@@ -53,19 +54,19 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
 
+        // each frame we send a RayCast from camera
         ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
 
-            if(objectHit != hit.transform)
+            if(objectHit != hit.transform) // if we hit a new object
             {
                 if (objectHit != null && selectedObject != null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
                 objectHit = hit.transform;
                 if ((objectHit.tag == "SegmentTunnel" && selectedObject != null && (selectedObject.tag == "Tunnel" || selectedObject.tag == "Eraser") || (objectHit.tag == "SegmentRoom" && selectedObject != null && (selectedObject.tag == "Room" || selectedObject.tag == "Eraser")))) objectHit.GetComponent<MeshRenderer>().enabled = true;
             }
 
-            if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205 && !selectedObject.GetComponent<Model>().rigid) selectedObject.transform.position = new Vector3(hit.point.x, 0f, hit.point.z); //updating selected object position
-            else if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205 && selectedObject.GetComponent<Model>().rigid && objectHit.tag == "Segment") selectedObject.transform.position = objectHit.transform.position; //updating selected object position
+            if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205) selectedObject.transform.position = new Vector3((int)Mathf.Floor(hit.point.x), selectedObject.transform.position.y, (int)Mathf.Ceil(hit.point.z)); //updating selected object position
 
             if (selectedObject == null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
 
@@ -76,14 +77,14 @@ public class CameraControl : MonoBehaviour
         //UI//
         if (selectedObject != null && selectedObject.tag != "Placeable" )
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0)) // if it's not placeable
             {
                 putObject();
             }
         }
         else if(selectedObject != null && selectedObject.tag == "Placeable")
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0)) // if it is a placeable, we look for mouse button up
             {
                 putObject();
             }
@@ -102,11 +103,13 @@ public class CameraControl : MonoBehaviour
         //rotating
         if (Input.GetKeyDown("t") || Input.GetAxis("Mouse ScrollWheel") < 0f && selectedObject != null && selectedObject.tag == "Placeable") //Zoom)
         {
-            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y + 10f + 10f - selectedObject.transform.localEulerAngles.y%10), 0.0f));
+            if(selectedObject.GetComponent<Model>().freeRotation) selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y + 10f + 10f - selectedObject.transform.localEulerAngles.y%10), 0.0f));
+            else selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y + 90f), 0.0f));
         }
         if (Input.GetKeyDown("r") || Input.GetAxis("Mouse ScrollWheel") > 0f && selectedObject != null && selectedObject.tag == "Placeable") //Zoom)
         {
-            selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y - 10f - selectedObject.transform.localEulerAngles.y % 10), 0.0f));
+            if (selectedObject.GetComponent<Model>().freeRotation) selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y - 10f - selectedObject.transform.localEulerAngles.y % 10), 0.0f));
+            else selectedObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, (int)(selectedObject.transform.localEulerAngles.y - 90f), 0.0f));
         }
 
 
@@ -164,21 +167,22 @@ public class CameraControl : MonoBehaviour
 
         if (selectedObject != null && !EditorUI.editorUI.panelVisible) //This will entangle segment and current tunnel
         {
-            if((selectedObject.tag == "Tunnel" && objectHit.tag == "SegmentTunnel") || (selectedObject.tag == "Room" && objectHit.tag == "SegmentRoom"))
+            if((selectedObject.tag == "Tunnel" && objectHit.tag == "SegmentTunnel") || (selectedObject.tag == "Room" && objectHit.tag == "SegmentRoom")) // put object
             {
                 objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
                 updateSegments(objectHit.transform);
             }
-            if (selectedObject.tag == "Eraser" && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom"))
+            if (selectedObject.tag == "Eraser" && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) // delete object
             {
                 objectHit.GetComponent<SegmentTunnel>().type = null;
                 updateSegments(objectHit.transform);
             }
-            else if (selectedObject.tag == "Placeable")
+            else if (selectedObject.tag == "Placeable") // put placeable
             {
                 selectedObject.transform.parent = placeables.transform;
                 selectedObject.GetComponent<Model>().saveStats();
-                
+                mapPlaceables.Add(selectedObject);
+
                 selectedObject = null;
                 selectObject(selectedIdFull);
             }
@@ -188,14 +192,14 @@ public class CameraControl : MonoBehaviour
 
     public void updateSegments(Transform collider)
     {
-        Collider[] colliders = Physics.OverlapSphere(collider.position, 1);
+        Collider[] colliders = Physics.OverlapSphere(collider.position, 1); // Segments colliding with current segment
 
         bool found = false;
         for(int a = 0; a < colliders.Length; a++)
         {
             if(colliders[a].gameObject.tag == "Segment")
             {
-                if (colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, true)) found = true;
+                if (colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, true)) found = true; // first we check if tile with current code exists, if it does we set found true
             }
         }
 
@@ -205,7 +209,7 @@ public class CameraControl : MonoBehaviour
             {
                 if (colliders[a].gameObject.tag == "Segment")
                 {
-                    colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, false);
+                    colliders[a].gameObject.GetComponent<Segment>().updateSegment(collider, false); // this will actually instantiate the correct tile
                 }
             }
         }
@@ -222,7 +226,7 @@ public class CameraControl : MonoBehaviour
 
     public void selectObject(string modelId)
     {
-        if (selectedObject != null) Destroy(selectedObject.gameObject);
+        if (selectedObject != null) Destroy(selectedObject.gameObject); // destroy previously selected object
 
         if (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom") objectHit.GetComponent<MeshRenderer>().enabled = false;
 
@@ -325,8 +329,9 @@ public class CameraControl : MonoBehaviour
     public void tryLevel()
     {
         buildMaps();
-        string mapString = getArrayString(currentMap);
-        string placeablesString = getArrayString(currentPlaceables);
+
+        string mapString = getArrayString(currentMap); //Converts current map list to string array
+        string placeablesString = getArrayString(currentPlaceables); // same
         controller.map = currentMap;
         controller.placeables = currentPlaceables;
 
@@ -339,28 +344,26 @@ public class CameraControl : MonoBehaviour
 
     public void buildMaps()
     {
-        GameObject[] segments = GameObject.FindGameObjectsWithTag("Segment");
-        GameObject[] placeables = GameObject.FindGameObjectsWithTag("Placeable");
         int modelCount = 0;
         int placeableCount = 0;
-        placeableCount = placeables.Length;
+        placeableCount = mapPlaceables.Count;
 
-        for (var a = 0; a < segments.Length; a++)
+        for (var a = 0; a < segmentList.Count; a++)
         {
-            if (segments[a].GetComponent<Segment>().holder != null) modelCount++;
+            if (segmentList[a].GetComponent<Segment>().holder != null) modelCount++; // getting model count
         }
 
         currentMap = new string[modelCount, 4];
 
-        for (int a = 0, mapPos = 0; a < segments.Length; a++)
+        for (int a = 0, mapPos = 0; a < segmentList.Count; a++) // build map array
         {
-            if (segments[a].gameObject.GetComponent<Segment>().holder != null)
+            if (segmentList[a].gameObject.GetComponent<Segment>().holder != null)
             {
                 int[] coords = new int[4];
 
                 for (int b = 0; b < 4; b++)
                 {
-                    currentMap[mapPos, b] = segments[a].gameObject.GetComponent<Segment>().holder.GetComponent<Model>().coords[b];
+                    currentMap[mapPos, b] = segmentList[a].gameObject.GetComponent<Segment>().holder.GetComponent<Model>().coords[b];
                 }
                 mapPos++;
             }
@@ -368,12 +371,12 @@ public class CameraControl : MonoBehaviour
 
         currentPlaceables = new string[placeableCount, 4];
 
-        for (int a = 0, placePos = 0; a < placeables.Length; a++)
+        for (int a = 0, placePos = 0; a < mapPlaceables.Count; a++) // build placeables array
         {
             int[] coords = new int[4];
             for (int b = 0; b < 4; b++)
             {
-                currentPlaceables[placePos, b] = placeables[a].gameObject.GetComponent<Model>().coords[b];
+                currentPlaceables[placePos, b] = mapPlaceables[a].gameObject.GetComponent<Model>().coords[b];
             }
             placePos++;
         }
@@ -402,7 +405,7 @@ public class CameraControl : MonoBehaviour
     public void saveMapLocaly()
     {
 
-        if (!Directory.Exists(mapsPath))
+        if (!Directory.Exists(mapsPath)) // if maps directory doesn't exist, create a new one
         {
             Directory.CreateDirectory(mapsPath);
         }
