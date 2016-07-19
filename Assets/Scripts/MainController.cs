@@ -10,7 +10,7 @@ public class MainController : MonoBehaviour
     public static MainController mainController; // static reference to this singleton
 
     [System.NonSerialized] 
-    public string gameType = "cardboard";
+    public string gameType = "standalone";
     [System.NonSerialized]
     public List<GameObject> allTunnels = new List<GameObject>();
     public List<GameObject> allRooms = new List<GameObject>();
@@ -25,6 +25,8 @@ public class MainController : MonoBehaviour
     public int currentScene = 0; //Gets number in Update()
     private int previousScene = 0;
     private CastInto castInto = new CastInto();
+    private GameObject tunnelsContainer;
+    private GameObject placeablesContainer;
 
 	// Use this for initialization
 	void Start () 
@@ -86,6 +88,8 @@ public class MainController : MonoBehaviour
     {
         if (currentScene == 1) // if it's a main scene, build map
         {
+            if (tunnelsContainer == null) tunnelsContainer = GameObject.Find("Tunnels");
+            if (placeablesContainer == null) placeablesContainer = GameObject.Find("Placeables");
             buildMap();
         }
     }
@@ -97,17 +101,19 @@ public class MainController : MonoBehaviour
 
         for(int a = 0; a < map.GetLength(0); a++) //Build tunnels & rooms
         {
-            GameObject currentModel = new GameObject();
+            GameObject currentModel = transform.gameObject; // this is needed to prevent unity from creating an empty gameobject which would be visible in hierarchy
                 
             if(findObject.FindObjectByCode(allTunnels, map[a, 0]) != null) currentModel = findObject.FindObjectByCode(allTunnels, map[a, 0]);
             else if(findObject.FindObjectByCode(allRooms, map[a, 0]) != null) currentModel = findObject.FindObjectByCode(allRooms, map[a, 0]);
 
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(map[a, 1]), 0.0f, castInto.stringToInt(map[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(map[a, 3]), 0.0f)) as GameObject;
+            modelClone.transform.parent = tunnelsContainer.transform;
         }
         for (int a = 0; a < placeables.GetLength(0); a++) //Build placeables
         {
             GameObject currentModel = findObject.FindObjectByCode(allPlaceables, placeables[a, 0]);
             GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(placeables[a, 1]), currentModel.transform.position.y, castInto.stringToInt(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
+            modelClone.transform.parent = placeablesContainer.transform;
 
             // Adding camera
             if (currentModel.GetComponent<Model>().name == "Player")
@@ -115,6 +121,10 @@ public class MainController : MonoBehaviour
                 if (gameType == "cardboard")
                 {
                     GameObject carboardClone = Instantiate(cardBoard, currentModel.transform.position, transform.rotation) as GameObject;
+                }
+                else if (gameType == "standalone")
+                {
+                    GameObject pcCameraClone = Instantiate(pcCamera, currentModel.transform.position, transform.rotation) as GameObject;
                 }
             }
         }
