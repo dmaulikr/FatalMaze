@@ -95,10 +95,6 @@ public class CameraControl : MonoBehaviour
                 deleteObject();
         }
 
-        if(Input.GetKeyDown("u"))
-        {
-            tryLevel();
-        }
 
         //rotating
         if (Input.GetKeyDown("t") || Input.GetAxis("Mouse ScrollWheel") < 0f && selectedObject != null && selectedObject.tag == "Placeable") //Zoom)
@@ -326,7 +322,7 @@ public class CameraControl : MonoBehaviour
         else return null;
     }
 
-    public void tryLevel()
+    public void tryLevel(int gameMode)
     {
         buildMaps();
 
@@ -334,6 +330,8 @@ public class CameraControl : MonoBehaviour
         string placeablesString = getArrayString(currentPlaceables); // same
         controller.map = currentMap;
         controller.placeables = currentPlaceables;
+        controller.currentGameType = gameMode; // set standalone or cardboard
+        controller.updateGameMode();
 
         print("tunnels: " + mapString);
         print("placeables: " + placeablesString);

@@ -9,16 +9,15 @@ public class MainController : MonoBehaviour
 {
     public static MainController mainController; // static reference to this singleton
 
-    [System.NonSerialized] 
-    public string gameType = "standalone";
-    [System.NonSerialized]
-    public List<GameObject> allTunnels = new List<GameObject>();
-    public List<GameObject> allRooms = new List<GameObject>();
-    public List<GameObject> allPlaceables = new List<GameObject>();
-    public GameObject images;
+    public string[] gameTypes = { "standalone", "cardboard" };
+    private string gameType = "standalone";
+    [System.NonSerialized] public int currentGameType;
+    [System.NonSerialized] public List<GameObject> allTunnels = new List<GameObject>();
+    [System.NonSerialized] public List<GameObject> allRooms = new List<GameObject>();
+    [System.NonSerialized] public List<GameObject> allPlaceables = new List<GameObject>();
     // 1st - model, 2nd - x position, 3rd z position, 4th rotation
-    public string[,] map = {{"ra64", "-3", "27", "90"}, {"ra192", "3", "27", "180"}, {"ra192", "9", "27", "180"}, {"ra192", "15", "27", "180"}, {"ra128", "21", "27", "180"}, {"ra96", "-3", "21", "90"}, {"ra176", "3", "21", "270"}, {"ra48", "9", "21", "0"}, {"ra48", "15", "21", "0"}, {"ra20", "21", "21", "270"}, {"ra32", "-3", "15", "0"}, {"ra16", "3", "15", "270"}, {"ta4", "9", "15", "0"}, {"ta5", "21", "15", "0"}, {"ta6", "-9", "9", "90"}, {"ta10", "-3", "9", "90"}, {"ta10", "3", "9", "90"}, {"ta15", "9", "9", "0"}, {"ta10", "15", "9", "90"}, {"ta15", "21", "9", "0"}, {"ta8", "27", "9", "90"}, {"ta5", "-9", "3", "0"}, {"ra64", "3", "3", "90"}, {"ra193", "9", "3", "180"}, {"ra128", "15", "3", "180"}, {"ta5", "21", "3", "0"}, {"ta5", "-9", "-3", "0"}, {"ra96", "3", "-3", "90"}, {"ra240", "9", "-3", "0"}, {"ra144", "15", "-3", "270"}, {"ta1", "21", "-3", "180"}, {"ta1", "-9", "-9", "180"}, {"ra32", "3", "-9", "0"}, {"ra48", "9", "-9", "0"}, {"ra16", "15", "-9", "270"}};
-    public string[,] placeables = {{"p2", "9", "-3", "144"}, {"p1", "0", "24", "270"}, {"p1", "3", "25", "0"}, {"p0", "-9", "-1", "0"}};
+    [System.NonSerialized] public string[,] map = { { "ra64", "-3", "27", "90" }, { "ra192", "3", "27", "180" }, { "ra192", "9", "27", "180" }, { "ra192", "15", "27", "180" }, { "ra128", "21", "27", "180" }, { "ra96", "-3", "21", "90" }, { "ra176", "3", "21", "270" }, { "ra48", "9", "21", "0" }, { "ra48", "15", "21", "0" }, { "ra20", "21", "21", "270" }, { "ra32", "-3", "15", "0" }, { "ra16", "3", "15", "270" }, { "ta4", "9", "15", "0" }, { "ta5", "21", "15", "0" }, { "ta6", "-9", "9", "90" }, { "ta10", "-3", "9", "90" }, { "ta10", "3", "9", "90" }, { "ta15", "9", "9", "0" }, { "ta10", "15", "9", "90" }, { "ta15", "21", "9", "0" }, { "ta8", "27", "9", "90" }, { "ta5", "-9", "3", "0" }, { "ra64", "3", "3", "90" }, { "ra193", "9", "3", "180" }, { "ra128", "15", "3", "180" }, { "ta5", "21", "3", "0" }, { "ta5", "-9", "-3", "0" }, { "ra96", "3", "-3", "90" }, { "ra240", "9", "-3", "0" }, { "ra144", "15", "-3", "270" }, { "ta1", "21", "-3", "180" }, { "ta1", "-9", "-9", "180" }, { "ra32", "3", "-9", "0" }, { "ra48", "9", "-9", "0" }, { "ra16", "15", "-9", "270" } };
+    [System.NonSerialized] public string[,] placeables = { { "p2", "9", "-3", "144" }, { "p1", "0", "24", "270" }, { "p1", "3", "25", "0" }, { "p0", "-9", "-1", "0" } };
 
     public GameObject cardBoard;
     public GameObject pcCamera;
@@ -31,6 +30,7 @@ public class MainController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
+
         try
         {
             // Load all tunnels, rooms and placeables from assets
@@ -83,6 +83,11 @@ public class MainController : MonoBehaviour
             loadScene();
         }
 	}
+
+    public void updateGameMode()
+    {
+        gameType = gameTypes[currentGameType];
+    }
 
     private void loadScene()
     {

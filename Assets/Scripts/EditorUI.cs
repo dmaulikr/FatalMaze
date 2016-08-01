@@ -13,7 +13,6 @@ public class EditorUI : MonoBehaviour
     private List<GameObject> tunnelList;
     private List<GameObject> roomList;
     private List<GameObject> placeableList;
-    private List<Sprite> imageList;
     [System.NonSerialized]
     public bool panelVisible = false;
     public GameObject panel;
@@ -25,8 +24,6 @@ public class EditorUI : MonoBehaviour
         tunnelList = MainController.mainController.allTunnels;
         roomList = MainController.mainController.allRooms;
         placeableList = MainController.mainController.allPlaceables;
-        imageList = MainController.mainController.images.GetComponent<Images>().images;
-        //buildButtons();
 
         for(int a = 0; a < placeableList.Count; a++)
         {
