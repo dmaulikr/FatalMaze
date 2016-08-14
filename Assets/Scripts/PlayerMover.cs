@@ -36,7 +36,7 @@ public class PlayerMover : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Placeable" && other.GetComponent<Model>().pickable)
+        if(other.tag == "Placeable" && other.GetComponent<Model>().pickable && !other.GetComponent<PickItem>().picked)
         {
             takeItem(other.gameObject);
         }
