@@ -8,6 +8,11 @@ public class PickItem : MonoBehaviour
     public GameObject objectToFollow;
     public int followSpeed = 5;
 
+    private float countDown = 0;
+    private bool beingUsed = false;
+    private GameObject doorToOpen;
+    private string doorAnim;
+
 	void Update () 
     {
 	    if(picked)
@@ -16,11 +21,30 @@ public class PickItem : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, objectToFollow.transform.rotation, 5 * Time.deltaTime);
             if (followSpeed < 100) followSpeed++;
         }
+
+        if(countDown > 0 && beingUsed)
+        {
+            countDown -= Time.deltaTime;
+        }
+        else if(beingUsed)
+        {
+            Destroy(transform.gameObject);
+            doorToOpen.GetComponent<Door>().playAnim(doorAnim);
+        }
+
 	}
 
     public void removeScripts()
     {
         if (transform.GetComponent<Rotator>()) transform.GetComponent<Rotator>().enabled = false;
+    }
+
+    public void openLater(GameObject callbackObject, string animation, float countdown)
+    {
+        countDown = countdown;
+        beingUsed = true;
+        doorToOpen = callbackObject;
+        doorAnim = animation;
     }
 
 }
