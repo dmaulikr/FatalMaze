@@ -6,8 +6,11 @@ public class Door : MonoBehaviour
     public string objectRequired = "p2";
     public GameObject keyHole;
     public float animDelay = 3;
+    public string firstAnim;
+    public Collider doorCollider;
 
-    private string firstAnim = "Door1Open";
+    private bool opened = false;
+
 
     void Awake()
     {
@@ -19,7 +22,7 @@ public class Door : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Placeable" && other.GetComponent<PickItem>())
+        if (other.tag == "Placeable" && other.GetComponent<PickItem>() && !opened)
         {
 
             if(objectRequired == other.GetComponent<Model>().code)
@@ -28,7 +31,7 @@ public class Door : MonoBehaviour
                 other.GetComponent<PickItem>().objectToFollow = keyHole;
                 other.GetComponent<PickItem>().openLater(this.gameObject, firstAnim, animDelay);
 
-                if(other.transform.eulerAngles.y < 120 || other.transform.eulerAngles.y > 260) // if the player comes from another side of the door we have to change keyHole rotation
+                if(Mathf.Abs(other.transform.eulerAngles.y) - Mathf.Abs(keyHole.transform.eulerAngles.y) > 80) // if the player comes from another side of the door we have to change keyHole rotation
                 {
                     keyHole.transform.localEulerAngles += new Vector3(0, 180f, 0);
                 }
@@ -39,6 +42,8 @@ public class Door : MonoBehaviour
     public void playAnim(string anim)
     {
         transform.GetComponent<Animation>().Play(anim);
+        doorCollider.enabled = false;
+        opened = true;
     }
 
 }
