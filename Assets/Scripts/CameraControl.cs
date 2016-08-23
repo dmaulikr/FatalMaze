@@ -66,7 +66,7 @@ public class CameraControl : MonoBehaviour
                 if ((objectHit.tag == "SegmentTunnel" && selectedObject != null && (selectedObject.tag == "Tunnel" || selectedObject.tag == "Eraser") || (objectHit.tag == "SegmentRoom" && selectedObject != null && (selectedObject.tag == "Room" || selectedObject.tag == "Eraser")))) objectHit.GetComponent<MeshRenderer>().enabled = true;
             }
 
-            if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205) selectedObject.transform.position = new Vector3((int)Mathf.Floor(hit.point.x), selectedObject.transform.position.y, (int)Mathf.Ceil(hit.point.z)); //updating selected object position
+            if (selectedObject != null && selectedObject.tag != "Eraser" && mousePosition[0] <= screenWidth - 205 && !selectedObject.GetComponent<Model>().isSnapped) selectedObject.transform.position = new Vector3((int)Mathf.Floor(hit.point.x), selectedObject.transform.position.y, (int)Mathf.Ceil(hit.point.z)); //updating selected object position
 
             if (selectedObject == null && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) objectHit.GetComponent<MeshRenderer>().enabled = false;
 

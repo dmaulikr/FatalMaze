@@ -15,6 +15,8 @@ public class Model : MonoBehaviour
     private CastInto castInto = new CastInto();
     public bool freeRotation = true;
     public bool pickable = false;
+    [System.NonSerialized]
+    public bool isSnapped = false;
 
     void Awake()
     {
