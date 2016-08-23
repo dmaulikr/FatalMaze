@@ -117,7 +117,7 @@ public class MainController : MonoBehaviour
         for (int a = 0; a < placeables.GetLength(0); a++) //Build placeables
         {
             GameObject currentModel = findObject.FindObjectByCode(allPlaceables, placeables[a, 0]);
-            GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToInt(placeables[a, 1]), currentModel.transform.position.y, castInto.stringToInt(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
+            GameObject modelClone = Instantiate(currentModel, new Vector3(castInto.stringToFloat(placeables[a, 1]), currentModel.transform.position.y, castInto.stringToFloat(placeables[a, 2])), Quaternion.Euler(0.0f, castInto.stringToInt(placeables[a, 3]), 0.0f)) as GameObject;
             modelClone.transform.parent = placeablesContainer.transform;
 
             // Adding camera

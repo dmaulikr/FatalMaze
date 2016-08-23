@@ -30,4 +30,11 @@ public class CastInto
         return returnVal;
     }
 
+    public float stringToFloat(string value)
+    {
+        float returnVal;
+        float.TryParse(value, out returnVal);
+        return returnVal;
+    }
+
 }

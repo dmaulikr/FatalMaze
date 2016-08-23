@@ -26,8 +26,8 @@ public class Model : MonoBehaviour
     public void saveStats()
     {
         coords[0] = code;
-        coords[1] = ((int)(transform.position.x)).ToString();
-        coords[2] = ((int)(transform.position.z)).ToString();
+        coords[1] = ((float)(transform.position.x)).ToString();
+        coords[2] = ((float)(transform.position.z)).ToString();
         coords[3] = ((int)(transform.localEulerAngles.y)).ToString();
     }
 

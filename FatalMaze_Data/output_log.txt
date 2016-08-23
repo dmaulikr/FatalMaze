@@ -16,33 +16,33 @@ Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Ma
 Loading C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.075 seconds
+- Completed reload, in  0.057 seconds
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.765443 ms
+UnloadTime: 0.691036 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1650 -> priority: 1 
+  Thread -> id: 18b4 -> priority: 1 
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 5.837037 ms
+UnloadTime: 6.211206 ms
 
 Unloading 29 unused Assets to reduce memory usage. Loaded Objects now: 1014.
-Total: 0.601663 ms (FindLiveObjects: 0.108615 ms CreateObjectMapping: 0.053025 ms MarkObjects: 0.359202 ms  DeleteObjects: 0.079537 ms)
+Total: 0.555480 ms (FindLiveObjects: 0.076971 ms CreateObjectMapping: 0.068847 ms MarkObjects: 0.329268 ms  DeleteObjects: 0.079537 ms)
 
-tunnels: {{"ta6", "-9", "15", "90"}, {"ta10", "-3", "15", "90"}, {"ta10", "3", "15", "90"}, {"ta10", "9", "15", "90"}, {"ta12", "15", "15", "180"}, {"ra64", "-15", "9", "90"}, {"ra193", "-9", "9", "180"}, {"ra192", "-3", "9", "180"}, {"ra192", "3", "9", "180"}, {"ra192", "9", "9", "180"}, {"ra193", "15", "9", "180"}, {"ra128", "21", "9", "180"}, {"ra96", "-15", "3", "90"}, {"ra240", "-9", "3", "0"}, {"ra240", "-3", "3", "0"}, {"ra240", "3", "3", "0"}, {"ra240", "9", "3", "0"}, {"ra240", "15", "3", "0"}, {"ra144", "21", "3", "270"}, {"ra96", "-15", "-3", "90"}, {"ra240", "-9", "-3", "0"}, {"ra240", "-3", "-3", "0"}, {"ra240", "3", "-3", "0"}, {"ra240", "9", "-3", "0"}, {"ra240", "15", "-3", "0"}, {"ra144", "21", "-3", "270"}, {"ra32", "-15", "-9", "0"}, {"ra48", "-9", "-9", "0"}, {"ra48", "-3", "-9", "0"}, {"ra48", "3", "-9", "0"}, {"ra48", "9", "-9", "0"}, {"ra48", "15", "-9", "0"}, {"ra16", "21", "-9", "270"}}
+tunnels: {{"ra64", "3", "9", "90"}, {"ra192", "9", "9", "180"}, {"ra192", "15", "9", "180"}, {"ra128", "21", "9", "180"}, {"ra64", "-9", "3", "90"}, {"ra192", "-3", "3", "180"}, {"ra224", "3", "3", "90"}, {"ra176", "9", "3", "270"}, {"ra52", "15", "3", "0"}, {"ra16", "21", "3", "270"}, {"ra64", "-15", "-3", "90"}, {"ra224", "-9", "-3", "90"}, {"ra176", "-3", "-3", "270"}, {"ra52", "3", "-3", "0"}, {"ra16", "9", "-3", "270"}, {"ta1", "15", "-3", "180"}, {"ra32", "-15", "-9", "0"}, {"ra52", "-9", "-9", "0"}, {"ra16", "-3", "-9", "270"}, {"ta1", "3", "-9", "180"}, {"ta1", "-9", "-15", "180"}}
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
-placeables: {{"p4", "15", "9", "0"}, {"p3", "15", "1", "121"}, {"p0", "-5", "1", "0"}}
+placeables: {{"p4", "-9", "-9", "0"}, {"p4", "3", "-3", "0"}, {"p4", "15", "2", "0"}, {"p0", "-13", "-7", "0"}}
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
 
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 4.778673 ms
+UnloadTime: 3.191769 ms
 
 Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 943.
-Total: 0.435318 ms (FindLiveObjects: 0.059867 ms CreateObjectMapping: 0.046183 ms MarkObjects: 0.316440 ms  DeleteObjects: 0.011973 ms)
+Total: 0.467818 ms (FindLiveObjects: 0.086379 ms CreateObjectMapping: 0.065426 ms MarkObjects: 0.304039 ms  DeleteObjects: 0.011118 ms)
 
