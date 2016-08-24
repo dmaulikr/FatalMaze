@@ -31,7 +31,7 @@ public class Door : MonoBehaviour
                 other.GetComponent<PickItem>().objectToFollow = keyHole;
                 other.GetComponent<PickItem>().openLater(this.gameObject, firstAnim, animDelay);
 
-                if(Mathf.Abs(other.transform.eulerAngles.y) - Mathf.Abs(keyHole.transform.eulerAngles.y) > 80) // if the player comes from another side of the door we have to change keyHole rotation
+                if(Mathf.Abs(other.transform.eulerAngles.y) - Mathf.Abs(transform.eulerAngles.y) > 100) // if the player comes from another side of the door we have to change keyHole rotation
                 {
                     keyHole.transform.localEulerAngles += new Vector3(0, 180f, 0);
                 }

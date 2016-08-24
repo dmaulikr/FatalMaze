@@ -16,19 +16,19 @@ Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Ma
 Loading C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.113 seconds
+- Completed reload, in  0.069 seconds
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Ursa\Desktop\Unity games\FatalMaze\FatalMaze_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.702582 ms
+UnloadTime: 0.755180 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1754 -> priority: 1 
+  Thread -> id: 15a0 -> priority: 1 
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 6.319822 ms
+UnloadTime: 6.156043 ms
 
 Unloading 69 unused Assets to reduce memory usage. Loaded Objects now: 903.
-Total: 0.472522 ms (FindLiveObjects: 0.080392 ms CreateObjectMapping: 0.046183 ms MarkObjects: 0.253579 ms  DeleteObjects: 0.091511 ms)
+Total: 0.477653 ms (FindLiveObjects: 0.077827 ms CreateObjectMapping: 0.051314 ms MarkObjects: 0.243744 ms  DeleteObjects: 0.103484 ms)
 
