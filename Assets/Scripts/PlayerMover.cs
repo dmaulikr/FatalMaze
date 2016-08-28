@@ -6,6 +6,7 @@ public class PlayerMover : MonoBehaviour
     public float playerSpeed = 2f;
     private bool cameraFound = false;
     private GameObject mainCamera;
+    private bool moving = true;
 
 	// Use this for initialization
 	void Start () 
@@ -21,11 +22,15 @@ public class PlayerMover : MonoBehaviour
             cameraFound = true;
             mainCamera = GameObject.FindWithTag("MainCamera");
         }
+        if(Input.GetMouseButtonDown(0))
+        {
+            moving = !moving;
+        }
 	}
 
     void FixedUpdate()
     {
-        if(cameraFound)
+        if(cameraFound && moving)
         {
             mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 1.25f, transform.position.z);
             transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed);

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: ce47f021854d423419efa317d87d9669
-timeCreated: 1472032771
+timeCreated: 1472368494
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -45,7 +45,7 @@ ModelImporter:
       name: Door1Open
       takeName: Default Take
       firstFrame: 0
-      lastFrame: 49
+      lastFrame: 39
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

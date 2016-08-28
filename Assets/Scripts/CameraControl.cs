@@ -165,7 +165,7 @@ public class CameraControl : MonoBehaviour
         {
             if((selectedObject.tag == "Tunnel" && objectHit.tag == "SegmentTunnel") || (selectedObject.tag == "Room" && objectHit.tag == "SegmentRoom")) // put object
             {
-                objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
+                if(selectedIdShort != "" && selectedIdShort != null) objectHit.GetComponent<SegmentTunnel>().type = selectedIdShort;
                 updateSegments(objectHit.transform);
             }
             if (selectedObject.tag == "Eraser" && (objectHit.tag == "SegmentTunnel" || objectHit.tag == "SegmentRoom")) // delete object
