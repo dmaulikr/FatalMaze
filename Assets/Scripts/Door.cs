@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Door : MonoBehaviour 
 {
@@ -7,8 +8,11 @@ public class Door : MonoBehaviour
     public GameObject keyHole;
     public GameObject arrow;
     public float animDelay = 3;
-    public string firstAnim;
+    public List<string> animations = new List<string>();
     public Collider doorCollider;
+    public Collider closedDoorCollider;
+    public Collider openedDoorCollider;
+    public bool openedDoor = false;
 
 
     private bool opened = false;
@@ -16,9 +20,23 @@ public class Door : MonoBehaviour
 
     void Awake()
     {
-        if(MainController.mainController.currentScene != 1)
+        if (MainController.mainController.currentScene != 1)
         {
             Destroy(transform.GetComponent<Door>());
+        }
+    }
+
+    void Start()
+    {
+        if (openedDoor)
+        {
+            closedDoorCollider.enabled = false;
+            playAnim(animations[0]);
+            Destroy(arrow);
+        }
+        else
+        {
+            openedDoorCollider.enabled = false;
         }
     }
 
@@ -31,17 +49,29 @@ public class Door : MonoBehaviour
             {
                 other.GetComponent<PickItem>().followSpeed = 1;
                 other.GetComponent<PickItem>().objectToFollow = keyHole;
-                other.GetComponent<PickItem>().openLater(this.gameObject, firstAnim, animDelay);
+                other.GetComponent<PickItem>().openLater(this.gameObject, animations[0], animDelay);
                 Destroy(arrow);
             }
         }
+        if (openedDoor && other.tag == "PlayerBody")
+        {
+            playAnim(animations[1], true);
+        }
     }
 
-    public void playAnim(string anim)
+    public void playAnim(string anim, bool colliderEnable = false)
     {
         transform.GetComponent<Animation>().Play(anim);
-        doorCollider.enabled = false;
         opened = true;
+        if (!colliderEnable)
+        {
+            doorCollider.enabled = false;
+        }
+        else
+        {
+            doorCollider.enabled = true;
+        }
+
     }
 
 }

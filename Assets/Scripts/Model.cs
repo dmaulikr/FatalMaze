@@ -17,6 +17,7 @@ public class Model : MonoBehaviour
     public bool pickable = false;
     [System.NonSerialized]
     public bool isSnapped = false;
+    public bool snappable = false;
 
     void Awake()
     {

@@ -4,17 +4,15 @@ using System.Collections.Generic;
 
 public class SnapPoint : MonoBehaviour 
 {
-
-    public string forObject;
     private bool taken = false;
     private GameObject previousHolder;
 
 	private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Placeable" && forObject == other.GetComponent<Model>().code && !taken)
+        if(other.tag == "Placeable" && other.GetComponent<Model>().snappable && !taken)
         {
             other.GetComponent<Model>().isSnapped = true;
-            other.transform.position = transform.position;
+            other.transform.position = new Vector3(transform.position.x, other.transform.position.y, transform.position.z);
             taken = true;
             previousHolder = other.gameObject;
         }
