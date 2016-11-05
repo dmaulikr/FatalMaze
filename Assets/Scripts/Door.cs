@@ -13,8 +13,7 @@ public class Door : MonoBehaviour
     public Collider closedDoorCollider;
     public Collider openedDoorCollider;
     public bool openedDoor = false;
-
-
+    private bool doorShot = false;
     private bool opened = false;
 
 
@@ -28,33 +27,31 @@ public class Door : MonoBehaviour
 
     void Start()
     {
-        if (openedDoor)
-        {
-            closedDoorCollider.enabled = false;
-            playAnim(animations[0]);
-            Destroy(arrow);
-        }
-        else
-        {
-            openedDoorCollider.enabled = false;
-        }
+        Destroy(arrow);
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Placeable" && other.GetComponent<PickItem>() && !opened)
         {
-
             if(objectRequired == other.GetComponent<Model>().code)
             {
                 other.GetComponent<PickItem>().followSpeed = 1;
                 other.GetComponent<PickItem>().objectToFollow = keyHole;
                 other.GetComponent<PickItem>().openLater(this.gameObject, animations[0], animDelay);
-                Destroy(arrow);
             }
         }
+        if (other.tag == "PlayerBody" && openedDoor && !doorShot)
+        {
+            playAnim(animations[0], false);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
         if (openedDoor && other.tag == "PlayerBody")
         {
+            doorShot = true;
             playAnim(animations[1], true);
         }
     }
