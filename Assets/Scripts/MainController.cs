@@ -59,6 +59,7 @@ public class MainController : MonoBehaviour
 
 	}
 
+
     void Awake()
     {
         if(mainController == null) // main controller has to behave like singleton
