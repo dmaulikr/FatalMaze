@@ -22,6 +22,8 @@ public class Door : MonoBehaviour
         if (MainController.mainController.currentScene != 1)
         {
             Destroy(transform.GetComponent<Door>());
+            closedDoorCollider.enabled = false;
+            openedDoorCollider.enabled = false;
         }
     }
 
