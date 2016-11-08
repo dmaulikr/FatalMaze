@@ -4,8 +4,16 @@ using System.Collections.Generic;
 
 public class SnapPoint : MonoBehaviour 
 {
-    private bool taken = false;
+    public bool taken = false;
     private GameObject previousHolder;
+
+    void Awake()
+    {
+        if (MainController.mainController.currentScene == 1)
+        {
+            Destroy(transform.gameObject);
+        }
+    }
 
 	private void OnTriggerEnter(Collider other)
     {

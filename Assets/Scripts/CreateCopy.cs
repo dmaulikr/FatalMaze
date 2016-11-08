@@ -29,6 +29,8 @@ public class CreateCopy : MonoBehaviour {
                 GameObject a2 = Instantiate(objects[b], transform.position, Quaternion.Euler(0f, roomAngles[b, a], 0f)) as GameObject;
                 a2.GetComponent<Model>().code = shortCode + codes[b, a];
                 a2.GetComponent<Model>().name = name;
+                a2.tag = "Room";
+                a2.transform.position = new Vector3(0f, 0f, 0f);
                 if (a2.GetComponent<CreateCopy>()) Destroy(a2.GetComponent<CreateCopy>());
                 a2.name = names[b] + " (" + shortCode + codes[b, a] + ")";
                 cloneObject = a2;
