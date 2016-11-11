@@ -8,7 +8,7 @@ public class EditorUI : MonoBehaviour
     public static EditorUI editorUI;
     public List<string> availableTunnels;
     public List<string> availableRooms;
-    private List<string> availablePlaceables = new List<string>();
+    public List<string> availablePlaceables;
     public Button modelButton;
     private List<GameObject> tunnelList;
     private List<GameObject> roomList;
@@ -21,14 +21,6 @@ public class EditorUI : MonoBehaviour
 	void Start () 
     {
         editorUI = this;
-        tunnelList = MainController.mainController.allTunnels;
-        roomList = MainController.mainController.allRooms;
-        placeableList = MainController.mainController.allPlaceables;
-
-        for(int a = 0; a < placeableList.Count; a++)
-        {
-            availablePlaceables.Add(placeableList[a].GetComponent<Model>().code);
-        }
 	}
 
     void Update()
@@ -49,6 +41,16 @@ public class EditorUI : MonoBehaviour
         int startY = -bt_height/2 - 2;
         List<string> list = new List<string>();
         List<GameObject> currentModels = new List<GameObject>();
+
+        tunnelList = MainController.mainController.allTunnels;
+        roomList = MainController.mainController.allRooms;
+        placeableList = MainController.mainController.allPlaceables;
+        availablePlaceables = new List<string>();
+
+        for (int a = 0; a < placeableList.Count; a++)
+        {
+            availablePlaceables.Add(placeableList[a].GetComponent<Model>().code);
+        }
 
         if (type == "tunnels")
         {
