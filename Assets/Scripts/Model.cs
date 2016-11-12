@@ -12,6 +12,8 @@ public class Model : MonoBehaviour
     public string[] coords = new string[4];
     public Sprite image;
     private string idOnly;
+    [System.NonSerialized]
+    public int idOnlyInt;
     private CastInto castInto = new CastInto();
     public bool freeRotation = true;
     public bool pickable = false;

@@ -7,9 +7,12 @@ public class Fog : MonoBehaviour
     public float maxDensity = 0.2f;
     private float currentDensity = 0f;
     private bool fogAppear = false;
+    private MainController mainController = MainController.mainController;
 
     void Awake()
     {
+        gameObject.transform.FindChild("Fog").GetComponent<Renderer>().material.color = fogColor;
+
         if (MainController.mainController.currentScene == 1)
         {
             gameObject.transform.FindChild("Fog").GetComponent<MeshRenderer>().enabled = false;
@@ -19,18 +22,20 @@ public class Fog : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+
+        mainController.fogColor = fogColor;
+        mainController.maxDensity = maxDensity;
+
         if(other.tag == "PlayerBody")
         {
-            RenderSettings.fog = true;
-            RenderSettings.fogMode = FogMode.ExponentialSquared;
-            RenderSettings.fogColor = fogColor;
-            fogAppear = true;
+            mainController.enterFog(FogMode.ExponentialSquared, fogColor);
         }
     }
-
-    void Update()
+    void OnTriggerExit(Collider other)
     {
-        if (fogAppear && currentDensity < maxDensity) currentDensity += 0.002f;
-        RenderSettings.fogDensity = currentDensity;
+        if (other.tag == "PlayerBody")
+        {
+            mainController.exitFog();
+        }
     }
 }
