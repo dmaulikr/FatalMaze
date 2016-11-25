@@ -12,6 +12,7 @@ public class PickItem : MonoBehaviour
     private bool beingUsed = false;
     private GameObject doorToOpen;
     private string doorAnim;
+    private int soundIndex;
 
 	void Update () 
     {
@@ -29,7 +30,7 @@ public class PickItem : MonoBehaviour
         else if(beingUsed)
         {
             Destroy(transform.gameObject);
-            doorToOpen.GetComponent<Door>().playAnim(doorAnim);
+            doorToOpen.GetComponent<Door>().playAnim(doorAnim, false, soundIndex);
         }
 
 	}
@@ -39,12 +40,12 @@ public class PickItem : MonoBehaviour
         if (transform.GetComponent<Rotator>()) transform.GetComponent<Rotator>().enabled = false;
     }
 
-    public void openLater(GameObject callbackObject, string animation, float countdown)
+    public void openLater(GameObject callbackObject, string animation, float countdown, int sound)
     {
+        soundIndex = sound;
         countDown = countdown;
         beingUsed = true;
         doorToOpen = callbackObject;
         doorAnim = animation;
     }
-
 }

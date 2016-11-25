@@ -26,6 +26,20 @@ public class Model : MonoBehaviour
         shortCode = castInto.codeToShortCode(code);
     }
 
+    void Start()
+    {
+        if (MainController.mainController.currentScene == 1)
+        {
+            for (int a = 0; a < transform.childCount; a++)
+            {
+                if (transform.GetChild(a).GetComponent<MeshRenderer>())
+                {
+                    transform.GetChild(a).GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+        }
+    }
+
     public void saveStats()
     {
         coords[0] = code;
