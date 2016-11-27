@@ -95,6 +95,15 @@ public class MainController : MonoBehaviour
             previousScene = currentScene;
             loadScene();
         }
+        if(Input.GetMouseButtonDown(0) && currentScene == 1)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        if(Input.GetKey("f"))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
 
         updateFog();
 	}

@@ -20,6 +20,7 @@ public class Model : MonoBehaviour
     [System.NonSerialized]
     public bool isSnapped = false;
     public bool snappable = false;
+    public bool shouldOptimize = true;
 
     void Awake()
     {

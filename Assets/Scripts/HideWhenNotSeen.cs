@@ -18,9 +18,12 @@ public class HideWhenNotSeen : MonoBehaviour
     {
         for(int a = 0; a < other.transform.childCount; a++)
         {
-            if (other.transform.GetChild(a).GetComponent<MeshRenderer>())
+            if (other.transform.GetChild(a).GetComponent<MeshRenderer>() && other.transform.GetComponent<Model>())
             {
-                other.transform.GetChild(a).GetComponent<MeshRenderer>().enabled = toogle;
+                if(other.transform.GetComponent<Model>().shouldOptimize)
+                {
+                    other.transform.GetChild(a).GetComponent<MeshRenderer>().enabled = toogle;
+                }
             }
         }
     }

@@ -7,21 +7,20 @@ public class CreateCopy : MonoBehaviour {
     public string roomName = "Roomc";
     public string roomShortCode = "rd";
     private string[,] roomCodes = { { "16", "32", "64", "128" }, { "48", "96", "144", "192" }, { "240", "0", "0", "0" }, { "112", "176", "208", "224" }, { "80", "160", "0", "0" }, { "52", "104", "146", "193" }, { "18", "36", "72", "129" }, { "22", "44", "73", "131" }, { "20", "40", "65", "130" } };
-    public List<string> roomNames;
     private int[] roomTimesCount = { 4, 4, 1, 4, 2, 4, 4, 4, 4 };
     public List<GameObject> roomObjects;
     public string roomChildName = "Tunnel1";
     [System.NonSerialized]
     private int[,] roomAngles = { { 270, 0, 90, 180 }, { 0, 90, 270, 180 }, { 0, 0, 0, 0 }, { 0, 270, 180, 90 }, { 90, 0, 0, 0 }, { 0, 90, 270, 180 }, { 270, 0, 90, 180 }, { 270, 0, 90, 180 }, { 270, 0, 90, 180 }};
-
     public string tunnelName = "Tunnelc";
     public string tunnelShortCode = "tc";
     private string[,] tunnelCodes = { { "1", "2", "4", "8" }, { "5", "10", "0", "0" }, { "7", "11", "13", "14" }, { "3", "6", "9", "12" }, { "15", "0", "0", "0" } };
-    public List<string> tunnelNames;
     private int[] tunnelTimesCount = { 4, 2, 4, 4, 1};
     public List<GameObject> tunnelObjects;
     public string tunnelChildName = "Tunnel1";
     private int[,] tunnelAngles = { { 180, 270, 0, 90 }, { 0, 90, 0, 0 }, { 90, 0, 270, 180 }, { 0, 90, 270, 180 }, { 0, 0, 0, 0 } };
+    public List<string> roomNames;
+    public List<string> tunnelNames;
 
 	void Start ()
     {
