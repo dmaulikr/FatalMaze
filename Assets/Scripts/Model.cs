@@ -9,7 +9,7 @@ public class Model : MonoBehaviour
     public string shortCode;
     public string name;
     [System.NonSerialized]
-    public string[] coords = new string[4];
+    public string[] coords = new string[5];
     public Sprite image;
     private string idOnly;
     [System.NonSerialized]
@@ -45,8 +45,9 @@ public class Model : MonoBehaviour
     {
         coords[0] = code;
         coords[1] = ((float)(transform.position.x)).ToString();
-        coords[2] = ((float)(transform.position.z)).ToString();
-        coords[3] = ((int)(transform.localEulerAngles.y)).ToString();
+        coords[2] = ((float)(transform.position.y)).ToString();
+        coords[3] = ((float)(transform.position.z)).ToString();
+        coords[4] = ((int)(transform.localEulerAngles.y)).ToString();
     }
 
 }

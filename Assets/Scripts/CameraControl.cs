@@ -175,6 +175,10 @@ public class CameraControl : MonoBehaviour
             }
             else if (selectedObject.tag == "Placeable") // put placeable
             {
+                if(selectedObject.GetComponent<PlaceableFloorSnap>())
+                {
+                    Destroy(selectedObject.GetComponent<PlaceableFloorSnap>());
+                }
                 selectedObject.transform.parent = placeables.transform;
                 selectedObject.GetComponent<Model>().saveStats();
                 mapPlaceables.Add(selectedObject);
@@ -351,15 +355,15 @@ public class CameraControl : MonoBehaviour
             if (segmentList[a].GetComponent<Segment>().holder != null) modelCount++; // getting model count
         }
 
-        currentMap = new string[modelCount, 4];
+        currentMap = new string[modelCount, 5];
 
         for (int a = 0, mapPos = 0; a < segmentList.Count; a++) // build map array
         {
             if (segmentList[a].gameObject.GetComponent<Segment>().holder != null)
             {
-                int[] coords = new int[4];
+                int[] coords = new int[5];
 
-                for (int b = 0; b < 4; b++)
+                for (int b = 0; b < 5; b++)
                 {
                     currentMap[mapPos, b] = segmentList[a].gameObject.GetComponent<Segment>().holder.GetComponent<Model>().coords[b];
                 }
@@ -367,12 +371,12 @@ public class CameraControl : MonoBehaviour
             }
         }
 
-        currentPlaceables = new string[placeableCount, 4];
+        currentPlaceables = new string[placeableCount, 5];
 
         for (int a = 0, placePos = 0; a < mapPlaceables.Count; a++) // build placeables array
         {
-            int[] coords = new int[4];
-            for (int b = 0; b < 4; b++)
+            int[] coords = new int[5];
+            for (int b = 0; b < 5; b++)
             {
                 currentPlaceables[placePos, b] = mapPlaceables[a].gameObject.GetComponent<Model>().coords[b];
             }
