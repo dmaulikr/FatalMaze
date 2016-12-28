@@ -15,7 +15,7 @@ public class MainController : MonoBehaviour
     [System.NonSerialized] public List<GameObject> allTunnels = new List<GameObject>();
     [System.NonSerialized] public List<GameObject> allRooms = new List<GameObject>();
     [System.NonSerialized] public List<GameObject> allPlaceables = new List<GameObject>();
-    // 1st - model, 2nd - x position, 3rd z position, 4th rotation
+    // 1st - model, 2nd - x position, 3rd y position, 4th z rotation, 5th rotation
     [System.NonSerialized] public string[,] map =  {{"rd64", "-21", "0", "51", "90"}, {"rd192", "-15", "0", "51", "180"}, {"rd128", "-9", "0", "51", "180"}, {"rd64", "-27", "0", "45", "90"}, {"rd224", "-21", "0", "45", "90"}, {"rd240", "-15", "0", "45", "0"}, {"rd208", "-9", "0", "45", "180"}, {"rd128", "-3", "0", "45", "180"}, {"rd64", "-33", "0", "39", "90"}, {"rd224", "-27", "0", "39", "90"}, {"rd240", "-21", "0", "39", "0"}, {"rd240", "-15", "0", "39", "0"}, {"rd240", "-9", "0", "39", "0"}, {"rd208", "-3", "0", "39", "180"}, {"rd128", "3", "0", "39", "180"}, {"rd96", "-33", "0", "33", "90"}, {"rd240", "-27", "0", "33", "0"}, {"rd240", "-21", "0", "33", "0"}, {"rd240", "-15", "0", "33", "0"}, {"rd240", "-9", "0", "33", "0"}, {"rd240", "-3", "0", "33", "0"}, {"rd144", "3", "0", "33", "270"}, {"rd32", "-33", "0", "27", "0"}, {"rd48", "-27", "0", "27", "0"}, {"rd112", "-21", "0", "27", "0"}, {"rd240", "-15", "0", "27", "0"}, {"rd176", "-9", "0", "27", "270"}, {"rd48", "-3", "0", "27", "0"}, {"rd16", "3", "0", "27", "270"}, {"rd96", "-21", "0", "21", "90"}, {"rd240", "-15", "0", "21", "0"}, {"rd144", "-9", "0", "21", "270"}, {"rd32", "-21", "0", "15", "0"}, {"rd52", "-15", "0", "15", "0"}, {"rd16", "-9", "0", "15", "270"}, {"te6", "-21", "0", "9", "90"}, {"te15", "-15", "0", "9", "0"}, {"te10", "-9", "0", "9", "90"}, {"te14", "-3", "0", "9", "180"}, {"te12", "3", "0", "9", "180"}, {"te3", "-21", "0", "3", "0"}, {"te11", "-15", "0", "3", "0"}, {"te14", "-9", "0", "3", "180"}, {"te11", "-3", "0", "3", "0"}, {"te9", "3", "0", "3", "270"}, {"re64", "-15", "0", "-3", "90"}, {"re193", "-9", "0", "-3", "180"}, {"re128", "-3", "0", "-3", "180"}, {"re32", "-15", "0", "-9", "0"}, {"re52", "-9", "0", "-9", "0"}, {"re16", "-3", "0", "-9", "270"}, {"tb5", "-9", "0", "-15", "0"}, {"tb5", "-9", "0", "-21", "0"}, {"tb1", "-9", "0", "-27", "180"}};
     [System.NonSerialized] public string[,] placeables = {{"p2", "-12", "0", "-6", "270"}, {"p2", "-6", "0", "-6", "270"}, {"p1", "-9", "0", "-25", "0"}, {"p6", "-9", "-0.0001155138", "-9.094", "0"}, {"p11", "-7", "0", "-4", "319"}, {"p9", "-15", "0", "13", "0"}, {"p9", "-15", "0", "18", "0"}, {"p9", "-9", "0", "18", "0"}, {"p9", "-21", "0", "18", "0"}, {"p9", "-21", "0", "24", "0"}, {"p9", "-15", "0", "24", "0"}, {"p9", "-9", "0", "24", "0"}, {"p11", "-15", "0", "49", "0"}};
     [System.NonSerialized] public Color fogColor = Color.red;
@@ -28,11 +28,18 @@ public class MainController : MonoBehaviour
     
     public GameObject cardBoard;
     public GameObject pcCamera;
+    public GameObject cardboardReadyScreen;
+    public GameObject pcReadyScreen;
     public int currentScene = 0; //Gets number in Update()
     private int previousScene = 0;
     private CastInto castInto = new CastInto();
     private GameObject tunnelsContainer;
     private GameObject placeablesContainer;
+    private GameObject gameCamera;
+    [System.NonSerialized]
+    public bool isPlaying = false;
+    [System.NonSerialized]
+    public bool isReady = false;
 
 	// Use this for initialization
 	void Start () 
@@ -150,11 +157,23 @@ public class MainController : MonoBehaviour
     {
         if (currentScene == 1) // if it's a main scene, build map
         {
+            resetDefaults();
             Cursor.lockState = CursorLockMode.Locked;
             if (tunnelsContainer == null) tunnelsContainer = GameObject.Find("Tunnels");
             if (placeablesContainer == null) placeablesContainer = GameObject.Find("Placeables");
             buildMap();
         }
+    }
+
+    private void resetDefaults()
+    {
+        isPlaying = false;
+        isReady = false;
+    }
+
+    public void addGameCamera()
+    {
+        Instantiate(gameCamera, gameCamera.transform.position, gameCamera.transform.rotation);
     }
 
     private void buildMap()
@@ -183,15 +202,22 @@ public class MainController : MonoBehaviour
             {
                 if (gameType == "cardboard")
                 {
-                    GameObject carboardClone = Instantiate(cardBoard, currentModel.transform.position, transform.rotation) as GameObject;
+                    gameCamera = cardBoard;
+                    gameCamera.transform.position = currentModel.transform.position;
+                    gameCamera.transform.rotation = transform.rotation;
+                    //GameObject carboardClone = Instantiate(cardBoard, currentModel.transform.position, transform.rotation) as GameObject;
                 }
                 else if (gameType == "standalone")
                 {
-                    GameObject pcCameraClone = Instantiate(pcCamera, currentModel.transform.position, transform.rotation) as GameObject;
+                    gameCamera = pcCamera;
+                    gameCamera.transform.position = currentModel.transform.position;
+                    gameCamera.transform.rotation = transform.rotation;
+                    //GameObject pcCameraClone = Instantiate(pcCamera, currentModel.transform.position, transform.rotation) as GameObject;
                 }
             }
         }
 
+        isReady = true;
     }
 
 

@@ -7,11 +7,12 @@ public class PlayerMover : MonoBehaviour
     private bool cameraFound = false;
     private GameObject mainCamera;
     private bool moving = true;
+    private MainController mainController;
 
 	// Use this for initialization
 	void Start () 
     {
-	
+        mainController = MainController.mainController;
 	}
 	
 	// Update is called once per frame
@@ -33,9 +34,12 @@ public class PlayerMover : MonoBehaviour
         if(cameraFound && moving)
         {
             mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 1.25f, transform.position.z);
-            transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed);
             if(mainCamera.transform.Find("Head")) transform.rotation = Quaternion.Euler(0, mainCamera.transform.Find("Head").transform.localEulerAngles.y, 0);
             else transform.rotation = Quaternion.Euler(0, mainCamera.transform.localEulerAngles.y, 0);
+            if(mainController.isPlaying)
+            {
+                transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed);
+            }
         }
     }
 
