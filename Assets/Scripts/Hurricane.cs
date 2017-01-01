@@ -3,12 +3,25 @@ using System.Collections;
 
 public class Hurricane : MonoBehaviour 
 {
-    private float rotationSpeed;
-    private float moveSpeed = 2f;
+    public bool movingCloser = true;
+    public bool gettingSmaller = false;
+    private Vector3 direction = Vector3.back;
+    public float dissapearSpeed = 0.001f;
+    public float appearSpeed = 0.01f;
+    public float scaleSpeed = -0.001f;
 
-    private float rValue;
-    private float gValue;
-    private float bValue;
+    private float rotationSpeed;
+    public float moveSpeed = 2f;
+
+    private float rValue = 0;
+    private float gValue = 0;
+    private float bValue = 0;
+    private float rValueMax = 0;
+    private float gValueMax = 0;
+    private float bValueMax = 0;
+    private bool rValueMaxReached = false;
+    private bool gValueMaxReached = false;
+    private bool bValueMaxReached = false;
 
     private Renderer rend;
 
@@ -16,18 +29,60 @@ public class Hurricane : MonoBehaviour
     {
         GameObject childHuricane = transform.FindChild("Hurricane").gameObject;
         rend = childHuricane.GetComponent<Renderer>();
+        rend.material.SetColor("_TintColor", new Color(rValue, gValue, bValue));
 
-        rotationSpeed = Random.RandomRange(15f, 25f);
-        rValue = Random.RandomRange(0.5f, 1f);
-        gValue = Random.RandomRange(0.5f, 1f);
-        bValue = Random.RandomRange(0.5f, 1f);
+        if(!movingCloser)
+        {
+            direction = Vector3.forward;
+        }
+
+        rotationSpeed = Random.RandomRange(15f, 35f);
+        rValueMax = Random.RandomRange(0.4f, 0.9f);
+        gValueMax = Random.RandomRange(0.4f, 0.9f);
+        bValueMax = Random.RandomRange(0.4f, 0.9f);
     }
 
     void Update()
     {
-        bValue -= 0.001f;
-        rValue -= 0.001f;
-        gValue -= 0.001f;
+        if(bValueMaxReached)
+        {
+            bValue -= dissapearSpeed;
+        }
+        else
+        {
+            bValue += appearSpeed;
+        }
+
+        if(rValueMaxReached)
+        {
+            rValue -= dissapearSpeed;
+        }
+        else
+        {
+            rValue += appearSpeed;
+        }
+
+        if(gValueMaxReached)
+        {
+            gValue -= dissapearSpeed;
+        }
+        else
+        {
+            gValue += appearSpeed;
+        }
+
+        if(bValue >= gValueMax)
+        {
+            bValueMaxReached = true;
+        }
+        if(rValue >= rValueMax)
+        {
+            rValueMaxReached = true;
+        }
+        if(gValue >= gValueMax)
+        {
+            gValueMaxReached = true;
+        }
 
         if(bValue < 0 && rValue < 0 && gValue < 0)
         {
@@ -37,8 +92,12 @@ public class Hurricane : MonoBehaviour
 
 	void FixedUpdate () 
     {
+        if(gettingSmaller)
+        {
+            transform.localScale += new Vector3(scaleSpeed, scaleSpeed, 0f);
+        }
         transform.localEulerAngles = transform.localEulerAngles += Vector3.forward * Time.deltaTime * rotationSpeed;
-        transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
+        transform.Translate(direction * Time.deltaTime * moveSpeed);
         rend.material.SetColor("_TintColor", new Color(rValue, gValue, bValue));
 	}
 }
