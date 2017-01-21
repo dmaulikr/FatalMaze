@@ -73,7 +73,7 @@ public class EditorUI : MonoBehaviour
             Button buttonClone = Instantiate(modelButton, modelButton.transform.position, modelButton.transform.rotation) as Button;
             buttonClone.GetComponent<selectButton>().modelId = list[a];
             buttonClone.GetComponentInChildren<Text>().text = CameraControl.mainCamera.findObject(currentModels, list[a]).GetComponent<Model>().name;
-            buttonClone.GetComponent<Image>().sprite = CameraControl.mainCamera.findObject(currentModels, list[a]).GetComponent<Model>().image;
+            buttonClone.transform.FindChild("Image").GetComponent<Image>().sprite = CameraControl.mainCamera.findObject(currentModels, list[a]).GetComponent<Model>().image;
             buttonClone.transform.position = new Vector3(startX, startY, 0f);
             buttonClone.transform.SetParent(transform, false);
             startX += bt_width + 2;

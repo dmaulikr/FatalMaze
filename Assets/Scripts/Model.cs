@@ -44,9 +44,9 @@ public class Model : MonoBehaviour
     public void saveStats()
     {
         coords[0] = code;
-        coords[1] = ((float)(transform.position.x)).ToString();
-        coords[2] = ((float)(transform.position.y)).ToString();
-        coords[3] = ((float)(transform.position.z)).ToString();
+        coords[1] = ((float)(System.Math.Round(transform.position.x, 2))).ToString();
+        coords[2] = ((float)(System.Math.Round(transform.position.y, 2))).ToString();
+        coords[3] = ((float)(System.Math.Round(transform.position.z, 2))).ToString();
         coords[4] = ((int)(transform.localEulerAngles.y)).ToString();
     }
 
